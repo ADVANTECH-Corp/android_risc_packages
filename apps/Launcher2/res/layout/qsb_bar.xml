@@ -15,7 +15,13 @@
 -->
 <com.android.launcher2.SearchDropTargetBar
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/QSBBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/qsb_bar_height"
+    android:layout_marginStart="@dimen/qsb_bar_height"
+    android:layout_marginEnd="@dimen/button_bar_height"
+    android:layout_marginTop="@dimen/qsb_bar_height"
+    android:paddingStart="@dimen/qsb_bar_height"
+    android:paddingEnd="@dimen/qsb_bar_height"
     android:focusable="false">
 
     <!-- Search buttons container -->
