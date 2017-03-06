@@ -40,6 +40,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -785,6 +786,9 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         if (v instanceof PagedViewIcon) {
             beginDraggingApplication(v);
         } else if (v instanceof PagedViewWidget) {
+            if(!SystemProperties.getBoolean("persist.launcher.drag_widget", false)){
+                return false;
+            }
             if (!beginDraggingWidget(v)) {
                 return false;
             }
