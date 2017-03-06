@@ -22,6 +22,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -216,6 +217,8 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
                 // Restore the background
                 mQSBSearchBar.setBackground(mPreviousBackground);
             }
+            boolean visible = SystemProperties.getBoolean("persist.launcher.searchbar", false);
+            setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
