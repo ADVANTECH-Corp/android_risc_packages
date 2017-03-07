@@ -26,6 +26,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ import com.android.settings.R;
 import com.android.settings.search.Index;
 import com.android.settings.widget.SwitchBar;
 import com.android.settingslib.WirelessUtils;
-
+import com.android.settings.Utils;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WifiEnabler implements SwitchBar.OnSwitchChangeListener  {
@@ -106,6 +107,14 @@ public class WifiEnabler implements SwitchBar.OnSwitchChangeListener  {
             mListeningToOnSwitchChange = true;
         }
         mSwitchBar.show();
+        int uiWifi = SystemProperties.getInt("persist.setting.wifi", 0);
+        if (uiWifi != Utils.UI_NORMAL) {
+            Switch s = mSwitchBar.getSwitch();
+            mSwitchBar.setEnabled((uiWifi & Utils.UI_ENABLE)!=0);
+            s.setEnabled((uiWifi & Utils.UI_ENABLE)!=0);
+            mSwitchBar.setChecked((uiWifi & Utils.UI_ON)!=0);
+            s.setChecked((uiWifi & Utils.UI_ON)!=0);
+        }
     }
 
     public void teardownSwitchBar() {
