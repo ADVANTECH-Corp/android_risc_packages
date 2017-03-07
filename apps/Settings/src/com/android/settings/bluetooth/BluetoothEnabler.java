@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -115,6 +116,14 @@ public final class BluetoothEnabler implements SwitchBar.OnSwitchChangeListener 
         mSwitchBar.addOnSwitchChangeListener(this);
         mContext.registerReceiver(mReceiver, mIntentFilter);
         mValidListener = true;
+        int uiBluetooth = SystemProperties.getInt("persist.setting.bt", 0);
+        if (uiBluetooth != com.android.settings.Utils.UI_NORMAL) {
+            Switch s = mSwitchBar.getSwitch();
+            mSwitchBar.setChecked((uiBluetooth & com.android.settings.Utils.UI_ON)!=0);
+            s.setChecked((uiBluetooth & com.android.settings.Utils.UI_ON)!=0);
+            mSwitchBar.setEnabled((uiBluetooth & com.android.settings.Utils.UI_ENABLE)!=0);
+            s.setEnabled((uiBluetooth & com.android.settings.Utils.UI_ENABLE)!=0);
+        }
     }
 
     public void pause() {
