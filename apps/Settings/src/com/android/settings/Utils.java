@@ -57,12 +57,14 @@ import android.os.IBinder;
 import android.os.INetworkManagementService;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.os.storage.StorageManager;
 import android.preference.Preference;
 import android.preference.PreferenceFrameLayout;
 import android.preference.PreferenceGroup;
+import android.preference.SwitchPreference;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
@@ -83,6 +85,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.widget.Checkable;
 import android.widget.ListView;
 import android.widget.TabWidget;
 
@@ -150,6 +153,12 @@ public final class Utils {
     private static final int SECONDS_PER_DAY = 24 * 60 * 60;
 
     public static final String OS_PKG = "os";
+    
+    public static final int UI_NORMAL = 0x0;
+    public static final int UI_ENABLE = 0x1;
+    public static final int UI_DISABLE = 0x2;
+    public static final int UI_ON = 0x4;
+    public static final int UI_OFF = 0x8;
 
     private static SparseArray<Bitmap> sDarkDefaultUserBitmapCache = new SparseArray<Bitmap>();
 
@@ -1177,6 +1186,25 @@ public final class Utils {
             Log.e(TAG, "Unable to acquire UserManager");
             return UserHandle.myUserId();
         }
+    }
+    
+    public static void setFeatureButtonUI(SwitchPreference preference, String key) {
+        int uiStatus = SystemProperties.getInt(key, UI_NORMAL);
+        if(preference == null || uiStatus == UI_NORMAL){
+            return;
+        }
+        preference.setEnabled((uiStatus & UI_ENABLE)!=0);
+        preference.setChecked((uiStatus & UI_ON)!=0);
+    }
+
+    public static void setFeatureButtonUI(View view, String key) {
+        int uiStatus = SystemProperties.getInt(key, UI_NORMAL);
+        if(view == null || !(view instanceof Checkable) || uiStatus == UI_NORMAL){
+            return;
+        }
+        Checkable c = (Checkable)view;
+        view.setEnabled((uiStatus & UI_ENABLE)!=0);
+        c.setChecked((uiStatus & UI_ON)!=0);
     }
 }
 
