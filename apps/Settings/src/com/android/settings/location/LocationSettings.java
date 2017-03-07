@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.SettingInjectorService;
 import android.os.Bundle;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.preference.Preference;
@@ -215,7 +216,21 @@ public class LocationSettings extends LocationSettingsBase
             lockdownOnLocationAccess = true;
         }
         addLocationServices(activity, root, lockdownOnLocationAccess);
-
+        int uiStatus = SystemProperties.getInt("persist.setting.loc", 0);
+        if (uiStatus != Utils.UI_NORMAL) {
+            int mode;
+            if ((uiStatus & Utils.UI_ON)!=0) {
+                mode = android.provider.Settings.Secure.getInt(getContentResolver(), android.provider.Settings.Secure.LOCATION_MODE,
+                    android.provider.Settings.Secure.LOCATION_MODE_OFF);
+                if (mode == android.provider.Settings.Secure.LOCATION_MODE_OFF) {
+                    mode = android.provider.Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
+                }
+            } else {
+                mode = android.provider.Settings.Secure.LOCATION_MODE_OFF;
+            }
+            android.provider.Settings.Secure.putInt(getContentResolver(), android.provider.Settings.Secure.LOCATION_MODE, mode);
+            mSwitch.setChecked((uiStatus & Utils.UI_ON)!=0);
+        }
         refreshLocationMode();
         return root;
     }
@@ -331,6 +346,14 @@ public class LocationSettings extends LocationSettingsBase
         // corner cases, the location might still be enabled. In such case the master switch should
         // be disabled but checked.
         final boolean enabled = (mode != android.provider.Settings.Secure.LOCATION_MODE_OFF);
+        int uiStatus = SystemProperties.getInt("persist.setting.loc", 0);
+        if (uiStatus != Utils.UI_NORMAL) {
+            mSwitch.setEnabled((uiStatus & Utils.UI_ENABLE)!=0);
+            //Utils.setFeatureButtonUI(mSwitch, uiStatus);
+            mSwitchBar.setEnabled((uiStatus & Utils.UI_ENABLE)!=0);
+            mLocationMode.setEnabled(enabled);
+            return;
+        }
         // Disable the whole switch bar instead of the switch itself. If we disabled the switch
         // only, it would be re-enabled again if the switch bar is not disabled.
         mSwitchBar.setEnabled(!restricted);
