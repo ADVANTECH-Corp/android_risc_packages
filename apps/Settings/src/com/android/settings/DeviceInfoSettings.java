@@ -194,8 +194,8 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
                 getPreferenceScreen().removePreference(pref);
             }
         }
-        setStringSummary(KEY_BOARD_NAME, SystemProperties.get("setting.about.board_name", getResources().getString(R.string.device_info_default)));
-        setStringSummary(KEY_BOARD_VERSION, SystemProperties.get("setting.about.board_version", getResources().getString(R.string.device_info_default)));
+        setStringSummary(KEY_BOARD_NAME, SystemProperties.get("persist.setting.board_name", getResources().getString(R.string.device_info_default)));
+        setStringSummary(KEY_BOARD_VERSION, SystemProperties.get("persist.setting.board_version", getResources().getString(R.string.device_info_default)));
     }
 
     @Override
