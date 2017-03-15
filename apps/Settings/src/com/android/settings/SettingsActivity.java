@@ -520,6 +520,9 @@ public class SettingsActivity extends Activity
         }
         mSearchView.setQuery(query, true /* submit */);
 
+        MenuItem mCustomMenuItem = menu.findItem(R.id.function_button);
+        boolean visible = SystemProperties.getBoolean("persist.setting.func_button", false);
+        mCustomMenuItem.setVisible(visible);
         return true;
     }
 
