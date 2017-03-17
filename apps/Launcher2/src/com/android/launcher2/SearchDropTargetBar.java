@@ -217,8 +217,10 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
                 // Restore the background
                 mQSBSearchBar.setBackground(mPreviousBackground);
             }
-            boolean visible = SystemProperties.getBoolean("persist.launcher.searchbar", false);
-            setVisibility(visible ? View.VISIBLE : View.GONE);
+            int prop = SystemProperties.getInt("persist.launcher.searchbar", 0);
+            if(prop!=0){
+                setVisibility(prop==1 ? View.VISIBLE : View.GONE);
+            }
         }
     }
 

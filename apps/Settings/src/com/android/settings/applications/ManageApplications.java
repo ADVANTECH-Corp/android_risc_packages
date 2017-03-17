@@ -589,7 +589,8 @@ public class ManageApplications extends InstrumentedFragment
             mCurrentPkgName = entry.info.packageName;
             mCurrentUid = entry.info.uid;
             //startApplicationDetailsActivity();
-            if (SystemProperties.getBoolean("persist.setting.manageapp", false)) {
+            int prop = SystemProperties.getInt("persist.setting.manageapp", 0);
+            if (prop == 0 || prop == 1) {
                 startApplicationDetailsActivity();
             }
         }

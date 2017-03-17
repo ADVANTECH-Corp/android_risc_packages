@@ -134,7 +134,8 @@ public class MasterClear extends InstrumentedFragment {
         mInitiateButton.setOnClickListener(mInitiateListener);
         mExternalStorageContainer = mContentView.findViewById(R.id.erase_external_container);
         mExternalStorage = (CheckBox) mContentView.findViewById(R.id.erase_external);
-        mInitiateButton.setEnabled(SystemProperties.getBoolean("persist.setting.factory_reset", false));
+        int prop = SystemProperties.getInt("persist.setting.factory_reset", 0);
+        mInitiateButton.setEnabled(prop == 2 ? false : true);
         /*
          * If the external storage is emulated, it will be erased with a factory
          * reset at any rate. There is no need to have a separate option until
