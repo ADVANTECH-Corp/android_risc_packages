@@ -378,6 +378,10 @@ public class SettingsActivity extends Activity
 
                 if (mBatteryPresent != batteryPresent) {
                     mBatteryPresent = batteryPresent;
+                    int prop = SystemProperties.getInt("persist.setting.battery", 0);
+                    if(prop != 0){
+                        mBatteryPresent = (prop == 1 ? true : false);
+                    }
                     invalidateCategories(true);
                 }
             }
@@ -1287,6 +1291,10 @@ public class SettingsActivity extends Activity
                     // Remove battery settings when battery is not available. (e.g. TV)
 
                     if (!mBatteryPresent) {
+                        removeTile = true;
+                    }
+                    int prop = SystemProperties.getInt("persist.setting.battery", 0);
+                    if(prop == 2){
                         removeTile = true;
                     }
                 } else if (id == R.id.home_settings) {
