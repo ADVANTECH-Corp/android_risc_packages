@@ -31,6 +31,7 @@ import android.hardware.fingerprint.Fingerprint;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.preference.ListPreference;
@@ -219,8 +220,8 @@ public class SecuritySettings extends SettingsPreferenceFragment
                 }
             });
         }
-
-        if (mIsPrimary) {
+        int prop = SystemProperties.getInt("persist.setting.sec.encrypt", 0);
+        if (mIsPrimary && prop != 2) {
             if (LockPatternUtils.isDeviceEncryptionEnabled()) {
                 // The device is currently encrypted.
                 addPreferencesFromResource(R.xml.security_settings_encrypted);
