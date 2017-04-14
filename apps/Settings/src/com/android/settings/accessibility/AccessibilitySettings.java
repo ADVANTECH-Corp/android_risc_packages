@@ -99,6 +99,8 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
             "screen_magnification_preference_screen";
     private static final String DISPLAY_DALTONIZER_PREFERENCE_SCREEN =
             "daltonizer_preference_screen";
+    private static final String TEXT_TO_SPEECH =
+            "tts_settings_preference";
 
     // Extras passed to sub-fragments.
     static final String EXTRA_PREFERENCE_KEY = "preference_key";
@@ -193,6 +195,7 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
     private PreferenceScreen mDisplayMagnificationPreferenceScreen;
     private PreferenceScreen mGlobalGesturePreferenceScreen;
     private PreferenceScreen mDisplayDaltonizerPreferenceScreen;
+    private PreferenceScreen mTexttoSpeechPreferenceScreen;
     private SwitchPreference mToggleInversionPreference;
 
     private int mLongPressTimeoutDefault;
@@ -426,6 +429,11 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
             // Remove accessibility shortcut if power key is not present
             // nor long press power does not show global actions menu.
             mSystemsCategory.removePreference(mGlobalGesturePreferenceScreen);
+        }
+        mTexttoSpeechPreferenceScreen = 
+                (PreferenceScreen) findPreference(TEXT_TO_SPEECH);
+        if(2 == SystemProperties.getInt("persist.setting.acc.textspeech", 0)){
+            mSystemsCategory.removePreference(mTexttoSpeechPreferenceScreen);
         }
     }
 
