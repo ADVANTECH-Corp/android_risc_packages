@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.preference.Preference;
@@ -821,6 +822,9 @@ public class UserSettings extends SettingsPreferenceFragment
 
         // Append Add user to the end of the list
         if (mUserCaps.mCanAddUser) {
+            if(2 == SystemProperties.getInt("persist.setting.adduser", 0)){
+                return;
+            }
             boolean moreUsers = mUserManager.canAddMoreUsers();
             mAddUser.setOrder(Preference.DEFAULT_ORDER);
             preferenceScreen.addPreference(mAddUser);
