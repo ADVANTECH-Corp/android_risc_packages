@@ -144,8 +144,7 @@ public class Hotseat extends FrameLayout {
         CellLayout.LayoutParams lp = new CellLayout.LayoutParams(x,y,1,1);
         lp.canReorder = false;
         //mContent.addViewToCellLayout(allAppsButton, -1, 0, lp, true);
-        int prop = SystemProperties.getInt("persist.launcher.allappsbutton", 0);
-        if(prop != 2){
+        if(SystemProperties.getBoolean("persist.launcher.allappsbutton", true)){
             mContent.addViewToCellLayout(allAppsButton, -1, 0, lp, true);
         }
     }

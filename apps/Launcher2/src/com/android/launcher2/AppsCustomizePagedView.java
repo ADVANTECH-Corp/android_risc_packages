@@ -786,8 +786,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         if (v instanceof PagedViewIcon) {
             beginDraggingApplication(v);
         } else if (v instanceof PagedViewWidget) {
-            int prop = SystemProperties.getInt("persist.launcher.drag_widget", 0);
-            if(prop == 2){
+            if(!SystemProperties.getBoolean("persist.launcher.drag_widget", true)){
                 return false;
             }
             if (!beginDraggingWidget(v)) {
