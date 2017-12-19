@@ -107,13 +107,11 @@ public class WifiEnabler implements SwitchBar.OnSwitchChangeListener  {
             mListeningToOnSwitchChange = true;
         }
         mSwitchBar.show();
-        int uiWifi = SystemProperties.getInt("persist.setting.wifi", 0);
-        if (uiWifi != Utils.UI_NORMAL) {
-            Switch s = mSwitchBar.getSwitch();
-            mSwitchBar.setEnabled((uiWifi & Utils.UI_ENABLE)!=0);
-            s.setEnabled((uiWifi & Utils.UI_ENABLE)!=0);
-            mSwitchBar.setChecked((uiWifi & Utils.UI_ON)!=0);
-            s.setChecked((uiWifi & Utils.UI_ON)!=0);
+        boolean prop = SystemProperties.getBoolean("persist.setting.wifi", true);
+        if (prop) {
+            mSwitchBar.show();
+        } else {
+            mSwitchBar.hide();
         }
     }
 

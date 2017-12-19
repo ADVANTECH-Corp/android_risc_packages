@@ -601,18 +601,17 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
             mGlobalGesturePreferenceScreen.setSummary(
                     R.string.accessibility_global_gesture_preference_summary_off);
         }
-        Utils.setFeatureButtonUI(mToggleLargeTextPreference, "persist.setting.acc.largetext");
-        handleToggleLargeTextPreferenceClick();
-        Utils.setFeatureButtonUI(mToggleHighTextContrastPreference, "persist.setting.acc.contrasttxt");
-        handleToggleTextContrastPreferenceClick();
-        Utils.setFeatureButtonUI(mToggleLockScreenRotationPreference, "persist.setting.acc.autorotate");
-        handleLockScreenRotationPreferenceClick();
-        Utils.setFeatureButtonUI(mToggleSpeakPasswordPreference, "persist.setting.acc.speakpwd");
-        handleToggleSpeakPasswordPreferenceClick();
-        int uiClrInvert = SystemProperties.getInt("persist.setting.acc.clrinvert", 0);
-        if (uiClrInvert != Utils.UI_NORMAL) {
-            Utils.setFeatureButtonUI(mToggleInversionPreference, "persist.setting.acc.clrinvert");
-            handleToggleInversionPreferenceChange((uiClrInvert & Utils.UI_ON)!=0);
+        if (!SystemProperties.getBoolean("persist.setting.acc.largetext", true)) {
+            mSystemsCategory.removePreference(mToggleLargeTextPreference);
+        }
+        if (!SystemProperties.getBoolean("persist.setting.acc.contrasttxt", true)) {
+            mSystemsCategory.removePreference(mToggleHighTextContrastPreference);
+        }
+        if (!SystemProperties.getBoolean("persist.setting.acc.autorotate", true)) {
+            mSystemsCategory.removePreference(mToggleLockScreenRotationPreference);
+        }
+        if (!SystemProperties.getBoolean("persist.setting.acc.speakpwd", true)) {
+            mSystemsCategory.removePreference(mToggleSpeakPasswordPreference);
         }
     }
 

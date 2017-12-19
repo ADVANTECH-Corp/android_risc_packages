@@ -525,8 +525,7 @@ public class SettingsActivity extends Activity
         mSearchView.setQuery(query, true /* submit */);
 
         MenuItem mCustomMenuItem = menu.findItem(R.id.function_button);
-        int prop = SystemProperties.getInt("persist.setting.func_button", 0);
-        mCustomMenuItem.setVisible(prop == 1 ? true : false);
+        mCustomMenuItem.setVisible(SystemProperties.getBoolean("persist.setting.func_button", true));
         return true;
     }
 

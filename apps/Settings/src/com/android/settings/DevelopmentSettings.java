@@ -732,9 +732,15 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
             setPrefsEnabledState(enable);
             mLastEnabledState = enable;
         }
-        Utils.setFeatureButtonUI(mKeepScreenOn, "persist.setting.dev.stayawake");
-        Utils.setFeatureButtonUI(mEnableAdb, "persist.setting.dev.adb");
-        Utils.setFeatureButtonUI(mDisableOverlays, "persist.setting.dev.hwoverlay");
+        if (!SystemProperties.getBoolean("persist.setting.dev.stayawake", true)) {
+            mDevelopementSettings.removePreference(mKeepScreenOn);
+        }
+        if (!SystemProperties.getBoolean("persist.setting.dev.adb", true)) {
+            mDevelopementSettings.removePreference(mEnableAdb);
+        }
+        if (!SystemProperties.getBoolean("persist.setting.dev.hwoverlay", true)) {
+            mDevelopementSettings.removePreference(mDisableOverlays);
+        }
         //Disable HW overlay
         writeDisableOverlaysOption();
         //Stay awake

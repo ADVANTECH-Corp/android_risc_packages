@@ -16,6 +16,16 @@
 
 package com.android.settings.location;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import com.android.internal.logging.MetricsLogger;
+import com.android.settings.R;
+import com.android.settings.SettingsActivity;
+import com.android.settings.Utils;
+import com.android.settings.widget.SwitchBar;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,15 +44,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Switch;
-import com.android.internal.logging.MetricsLogger;
-import com.android.settings.R;
-import com.android.settings.SettingsActivity;
-import com.android.settings.Utils;
-import com.android.settings.widget.SwitchBar;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * System location settings (Settings &gt; Location). The screen has three parts:
@@ -216,21 +217,8 @@ public class LocationSettings extends LocationSettingsBase
             lockdownOnLocationAccess = true;
         }
         addLocationServices(activity, root, lockdownOnLocationAccess);
-        int uiStatus = SystemProperties.getInt("persist.setting.loc", 0);
-        if (uiStatus != Utils.UI_NORMAL) {
-            int mode;
-            if ((uiStatus & Utils.UI_ON)!=0) {
-                mode = android.provider.Settings.Secure.getInt(getContentResolver(), android.provider.Settings.Secure.LOCATION_MODE,
-                    android.provider.Settings.Secure.LOCATION_MODE_OFF);
-                if (mode == android.provider.Settings.Secure.LOCATION_MODE_OFF) {
-                    mode = android.provider.Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
-                }
-            } else {
-                mode = android.provider.Settings.Secure.LOCATION_MODE_OFF;
-            }
-            android.provider.Settings.Secure.putInt(getContentResolver(), android.provider.Settings.Secure.LOCATION_MODE, mode);
-            mSwitch.setChecked((uiStatus & Utils.UI_ON)!=0);
-        }
+        boolean prop = SystemProperties.getBoolean("persist.setting.loc", true);
+        mSwitch.setVisibility(prop? android.view.View.VISIBLE : android.view.View.GONE);
         refreshLocationMode();
         return root;
     }

@@ -116,13 +116,11 @@ public final class BluetoothEnabler implements SwitchBar.OnSwitchChangeListener 
         mSwitchBar.addOnSwitchChangeListener(this);
         mContext.registerReceiver(mReceiver, mIntentFilter);
         mValidListener = true;
-        int uiBluetooth = SystemProperties.getInt("persist.setting.bt", 0);
-        if (uiBluetooth != com.android.settings.Utils.UI_NORMAL) {
-            Switch s = mSwitchBar.getSwitch();
-            mSwitchBar.setChecked((uiBluetooth & com.android.settings.Utils.UI_ON)!=0);
-            s.setChecked((uiBluetooth & com.android.settings.Utils.UI_ON)!=0);
-            mSwitchBar.setEnabled((uiBluetooth & com.android.settings.Utils.UI_ENABLE)!=0);
-            s.setEnabled((uiBluetooth & com.android.settings.Utils.UI_ENABLE)!=0);
+        boolean prop = SystemProperties.getBoolean("persist.setting.bt", true);
+        if (prop) {
+            mSwitchBar.show();
+        } else {
+            mSwitchBar.hide();
         }
     }
 

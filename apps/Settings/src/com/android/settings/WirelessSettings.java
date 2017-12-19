@@ -355,10 +355,9 @@ public class WirelessSettings extends SettingsPreferenceFragment implements Inde
             Preference ps = findPreference(KEY_CELL_BROADCAST_SETTINGS);
             if (ps != null) root.removePreference(ps);
         }
-        int uiAirplane = SystemProperties.getInt("persist.setting.net.airplane", 0);
-        if (uiAirplane != Utils.UI_NORMAL) {
-            Utils.setFeatureButtonUI(mAirplaneModePreference, "persist.setting.net.airplane");
-            mAirplaneModeEnabler.onPreferenceChange(mAirplaneModePreference, (Object)Boolean.valueOf((uiAirplane & Utils.UI_ON)!=0));
+        if (!SystemProperties.getBoolean("persist.setting.net.airplane", true)) {
+            removePreference(KEY_MOBILE_NETWORK_SETTINGS);
+            getPreferenceScreen().removePreference(mAirplaneModePreference);
         }
     }
 
