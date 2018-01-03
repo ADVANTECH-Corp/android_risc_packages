@@ -1332,6 +1332,21 @@ public class SettingsActivity extends Activity
                             UserManager.DISALLOW_DEBUGGING_FEATURES)) {
                         removeTile = true;
                     }
+                } else if (id == R.id.application_settings) {
+                    String dontshow= SystemProperties.get("persist.cust.apppage.hide");
+                    if ("true".equals(dontshow)) {
+                        removeTile = true;
+                    }
+                } else if (id == R.id.location_settings) {
+                    String dontshow= SystemProperties.get("persist.cust.btn.location.hide");
+                    if ("true".equals(dontshow)) {
+                        removeTile = true;
+                    }    
+                } else if (id == R.id.privacy_settings) {
+                    String dontshow= SystemProperties.get("persist.cust.factoryreset.hide");
+                    if ("true".equals(dontshow)) {
+                        removeTile = true;
+                    }
                 }
 
                 if (UserHandle.MU_ENABLED && UserHandle.myUserId() != 0
