@@ -29,6 +29,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.os.SystemProperties;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
@@ -88,6 +89,11 @@ public class DateTimeSettings extends SettingsPreferenceFragment
     private void initUI() {
         boolean autoTimeEnabled = getAutoState(Settings.Global.AUTO_TIME);
         boolean autoTimeZoneEnabled = getAutoState(Settings.Global.AUTO_TIME_ZONE);
+        boolean autoTimeUI = SystemProperties.getBoolean("persist.setting.auto.dt.ui",true);
+        boolean autoTimeZoneUI = SystemProperties.getBoolean("persist.setting.auto.tz.ui",true);
+        boolean Time24UI = SystemProperties.getBoolean("persist.setting.twentyfour.ui",true);
+        boolean autoTimeVal = SystemProperties.getBoolean("persist.setting.auto.dt.val",autoTimeEnabled);
+        boolean autoTimeZoneVal = SystemProperties.getBoolean("persist.setting.auto.tz.val",autoTimeZoneEnabled);
 
         mAutoTimePref = (SwitchPreference) findPreference(KEY_AUTO_TIME);
 
@@ -106,7 +112,15 @@ public class DateTimeSettings extends SettingsPreferenceFragment
 
         mDummyDate = Calendar.getInstance();
 
-        mAutoTimePref.setChecked(autoTimeEnabled);
+        if (!autoTimeUI)
+            getPreferenceScreen().removePreference(mAutoTimePref);
+
+        mAutoTimePref.setChecked(autoTimeVal);
+        if (!SystemProperties.get("persist.setting.auto.dt.val").equals("")) {
+            Settings.Global.putInt(getContentResolver(), Settings.Global.AUTO_TIME,
+                    autoTimeVal ? 1 : 0);
+            mAutoTimePref.setEnabled(false);
+        }
         mAutoTimeZonePref = (SwitchPreference) findPreference(KEY_AUTO_TIME_ZONE);
         // Override auto-timezone if it's a wifi-only device or if we're still in setup wizard.
         // TODO: Remove the wifiOnly test when auto-timezone is implemented based on wifi-location.
@@ -114,29 +128,44 @@ public class DateTimeSettings extends SettingsPreferenceFragment
             getPreferenceScreen().removePreference(mAutoTimeZonePref);
             autoTimeZoneEnabled = false;
         }
-        mAutoTimeZonePref.setChecked(autoTimeZoneEnabled);
+        if (!autoTimeZoneUI)
+            getPreferenceScreen().removePreference(mAutoTimeZonePref);
+
+        mAutoTimeZonePref.setChecked(autoTimeZoneVal);
+        if (!SystemProperties.get("persist.setting.auto.tz.val").equals("")) {
+            Settings.Global.putInt(
+                    getContentResolver(), Settings.Global.AUTO_TIME_ZONE,
+                    autoTimeZoneVal ? 1 : 0);
+            mAutoTimeZonePref.setEnabled(false);
+        }
 
         mTimePref = findPreference("time");
         mTime24Pref = findPreference("24 hour");
         mTimeZone = findPreference("timezone");
         mDatePref = findPreference("date");
-        if (isFirstRun) {
+        if (isFirstRun || !Time24UI) {
             getPreferenceScreen().removePreference(mTime24Pref);
         }
 
-        mTimePref.setEnabled(!autoTimeEnabled);
-        mDatePref.setEnabled(!autoTimeEnabled);
-        mTimeZone.setEnabled(!autoTimeZoneEnabled);
+        mTimePref.setEnabled(!autoTimeVal);
+        mDatePref.setEnabled(!autoTimeVal);
+        mTimeZone.setEnabled(!autoTimeZoneVal);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        boolean Time24Val = SystemProperties.getBoolean("persist.setting.twentyfour.val",is24Hour());
 
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
 
-        ((SwitchPreference)mTime24Pref).setChecked(is24Hour());
+        ((SwitchPreference)mTime24Pref).setChecked(Time24Val);
+        if (!SystemProperties.get("persist.setting.twentyfour.val").equals("")) {
+            set24Hour(Time24Val);
+            timeUpdated(Time24Val);
+            ((SwitchPreference)mTime24Pref).setEnabled(false);
+        }
 
         // Register for time ticks and other reasons for time change
         IntentFilter filter = new IntentFilter();

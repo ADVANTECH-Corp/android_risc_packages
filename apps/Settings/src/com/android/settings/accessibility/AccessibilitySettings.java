@@ -367,6 +367,12 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
         mToggleHighTextContrastPreference =
                 (SwitchPreference) findPreference(TOGGLE_HIGH_TEXT_CONTRAST_PREFERENCE);
 
+        if(SystemProperties.getBoolean("persist.setting.hc.text.ui",true)){
+            //Log.i("=AIM=AccessibilitySettings","Show TOGGLE_HIGH_TEXT_CONTRAST_PREFERENCE");
+        }else{
+            mSystemsCategory.removePreference(mToggleHighTextContrastPreference);
+        }
+
         // Display inversion.
         mToggleInversionPreference = (SwitchPreference) findPreference(TOGGLE_INVERSION_PREFERENCE);
         mToggleInversionPreference.setOnPreferenceChangeListener(this);
