@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.SystemProperties;
 import android.provider.MediaStore;
 
 import java.io.FileInputStream;
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 /**
  * Loads images from the local store.
  */
@@ -88,6 +91,7 @@ public class LocalSource extends CursorPhotoSource {
                 while (cursor.moveToNext()) {
                     String id = constructId(internal, cursor.getString(bucketIndex));
                     AlbumData data = foundAlbums.get(id);
+                    AlbumData SaveData =null;
                     if (foundAlbums.get(id) == null) {
                         data = new AlbumData();
                         data.id = id;
@@ -102,8 +106,27 @@ public class LocalSource extends CursorPhotoSource {
                         } else {
                             data.title = mUnknownAlbumName;
                         }
-
+                        
+                        // data.thumbnailUrl="/storage/emulated/0/testPho/IMG_20180129_202519.jpg";
+                        // data.id="PhotoTable.LocalSource:-481230453";
+                        // if(data.thumbnailUrl.indexOf("/storage/emulated/0/testPho/")>=0){
+                        // final String custScreensaver = SystemProperties.get("persist.setting.screensaver");
+                        final String custScreensaver = SystemProperties.get("persist.setting.screensaver","");
+                        if(data.thumbnailUrl.indexOf(custScreensaver)>=0){
+                            log(TAG, "indexOf >= 0");                         
+                            SaveData=data;
+                        }
+                        if( SaveData != null ){
+                            data=SaveData;
+                        }else{
+                            continue;
+                        }
                         log(TAG, data.title + " found");
+                        log(TAG, "data.title found: "+ data.title );
+                        log(TAG, "data.id found: "+ data.id );
+                        log(TAG, "data.thumbnailUrl found: "+ data.thumbnailUrl );
+                        log(TAG, "data.account found: "+ data.account );
+                        log(TAG, "data.updated found: "+ data.updated );
                         foundAlbums.put(id, data);
                     }
                     if (updatedIndex >= 0) {
@@ -251,6 +274,52 @@ public class LocalSource extends CursorPhotoSource {
         }
 
         return (InputStream) fis;
+    }
+    
+    //***************************************************//
+
+    private static Method sysPropGet;
+    private static Method sysPropSet;
+    static {
+        try {
+            Class<?> S = Class.forName("android.os.SystemProperties");
+            Method M[] = S.getMethods();
+            for (Method m : M) {
+                String n = m.getName();
+                if (n.equals("get")) {
+                    sysPropGet = m;
+                } else if (n.equals("set")) {
+                    sysPropSet = m;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String get(String name, String default_value) {
+        try {
+            return (String) sysPropGet.invoke(null, name, default_value);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return default_value;
+    }
+
+    public static void set(String name, String value) {
+        try {
+            sysPropSet.invoke(null, name, value);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }
 

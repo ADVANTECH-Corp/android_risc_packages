@@ -8,7 +8,7 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
 LOCAL_PACKAGE_NAME := PhotoTable
 
-LOCAL_SDK_VERSION := current
+#LOCAL_SDK_VERSION := current
 
 include $(BUILD_PACKAGE)
 
