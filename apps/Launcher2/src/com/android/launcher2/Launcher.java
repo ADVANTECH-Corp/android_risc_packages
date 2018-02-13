@@ -62,6 +62,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -1948,6 +1949,7 @@ public final class Launcher extends Activity
     }
 
     private void startWallpaper() {
+        if (!SystemProperties.getBoolean("persist.launcher.wpaper.change", true)) return;
         showWorkspace(true);
         final Intent pickWallpaper = new Intent(Intent.ACTION_SET_WALLPAPER);
         Intent chooser = Intent.createChooser(pickWallpaper,
