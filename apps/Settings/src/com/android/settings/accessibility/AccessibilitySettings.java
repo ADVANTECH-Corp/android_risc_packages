@@ -183,6 +183,7 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
     // Preference controls.
     private PreferenceCategory mServicesCategory;
     private PreferenceCategory mSystemsCategory;
+    private PreferenceCategory mDisplayCategory;
 
     private SwitchPreference mToggleLargeTextPreference;
     private SwitchPreference mToggleHighTextContrastPreference;
@@ -364,17 +365,27 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
                 (SwitchPreference) findPreference(TOGGLE_LARGE_TEXT_PREFERENCE);
 
         // Text contrast.
+        //AIM
         mToggleHighTextContrastPreference =
                 (SwitchPreference) findPreference(TOGGLE_HIGH_TEXT_CONTRAST_PREFERENCE);
-
-        if(SystemProperties.getBoolean("persist.setting.hc.text.ui",true)){
+        if(SystemProperties.getBoolean("persist.setting.hc.text.ui",true)) {
             //Log.i("=AIM=AccessibilitySettings","Show TOGGLE_HIGH_TEXT_CONTRAST_PREFERENCE");
-        }else{
+        } else {
             mSystemsCategory.removePreference(mToggleHighTextContrastPreference);
+            //Log.i("=AIM=AccessibilitySettings","Remove TOGGLE_HIGH_TEXT_CONTRAST_PREFERENCE");
         }
-
+		
         // Display inversion.
+        //AIM
+        mDisplayCategory = (PreferenceCategory) findPreference("display_category");
         mToggleInversionPreference = (SwitchPreference) findPreference(TOGGLE_INVERSION_PREFERENCE);
+
+        if(SystemProperties.getBoolean("persist.setting.clr.invert.ui",true)) {
+            //Log.i("=AIM=AccessibilitySettings","Show TOGGLE_INVERSION_PREFERENCE");
+            mDisplayCategory.removePreference(mToggleInversionPreference);
+            //Log.i("=AIM=AccessibilitySettings","Remove TOGGLE_INVERSION_PREFERENCE");
+        }
+        
         mToggleInversionPreference.setOnPreferenceChangeListener(this);
 
         // Power button ends calls.
@@ -555,10 +566,28 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
             /* ignore */
         }
         mToggleLargeTextPreference.setChecked(mCurConfig.fontScale == LARGE_FONT_SCALE);
+        
+        //HIGH_TEXT_CONTRAST
+        if(SystemProperties.getBoolean("persist.setting.hc.text.val",false)) {
+            Settings.Secure.putInt(getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_HIGH_TEXT_CONTRAST_ENABLED, 1);
+        } else {
+            Settings.Secure.putInt(getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_HIGH_TEXT_CONTRAST_ENABLED, 0);
+        }
 
         mToggleHighTextContrastPreference.setChecked(
                 Settings.Secure.getInt(getContentResolver(),
                         Settings.Secure.ACCESSIBILITY_HIGH_TEXT_CONTRAST_ENABLED, 0) == 1);
+
+        //DISPLAY_INVERSION
+        if(SystemProperties.getBoolean("persist.setting.clr.invert.val",false)) {
+            Settings.Secure.putInt(getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 1);
+        }else{
+            Settings.Secure.putInt(getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 0);
+        }
 
         // If the quick setting is enabled, the preference MUST be enabled.
         mToggleInversionPreference.setChecked(Settings.Secure.getInt(getContentResolver(),
