@@ -32,6 +32,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
+import android.os.SystemProperties;
 import android.util.DisplayMetrics;
 
 import com.android.launcher.R;
@@ -124,10 +125,6 @@ final class Utilities {
                     } else if (sourceHeight > sourceWidth) {
                         width = (int) (height * ratio);
                     }
-                } else if (sourceWidth < width && sourceHeight < height) {
-                    // Don't scale up the icon
-                    width = sourceWidth;
-                    height = sourceHeight;
                 }
             }
 
@@ -237,7 +234,9 @@ final class Utilities {
         final DisplayMetrics metrics = resources.getDisplayMetrics();
         final float density = metrics.density;
 
-        sIconWidth = sIconHeight = (int) resources.getDimension(R.dimen.app_icon_size);
+        sIconWidth = sIconHeight = SystemProperties.getInt("persist.launcher.icon.size", -1);
+        if (sIconWidth == -1)
+            sIconWidth = sIconHeight = (int) resources.getDimension(R.dimen.app_icon_size);
         sIconTextureWidth = sIconTextureHeight = sIconWidth;
 
         sBlurPaint.setMaskFilter(new BlurMaskFilter(5 * density, BlurMaskFilter.Blur.NORMAL));
