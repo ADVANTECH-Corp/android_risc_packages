@@ -27,6 +27,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemProperties;
 import android.os.Vibrator;
 import android.provider.SearchIndexableResource;
 import android.provider.Settings.Global;
@@ -211,8 +212,16 @@ public class OtherSoundSettings extends SettingsPreferenceFragment implements In
     }
 
     private static boolean hasHaptic(Context context) {
-        final Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        return vibrator != null && vibrator.hasVibrator();
+ //AIM Ryan 
+        String dontshow=SystemProperties.get("persist.haptic.feedback", "true");
+        if ("false".equals(dontshow)) {
+            return false;
+        }else{
+            return true;
+        }
+ //AIM
+        // final Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // return vibrator != null && vibrator.hasVibrator();
     }
 
     // === Callbacks ===
