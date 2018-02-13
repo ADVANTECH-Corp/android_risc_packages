@@ -1037,6 +1037,15 @@ public class UserSettings extends SettingsPreferenceFragment
         public static UserCapabilities create(Context context) {
             UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
             UserCapabilities caps = new UserCapabilities();
+ //AIM Ryan 
+            String dontshow=SystemProperties.get("persist.setting.user.add", "true");
+            if ("false".equals(dontshow)) {
+                caps.mCanAddUser=false;
+                caps.mCanAddRestrictedProfile = false;
+            }else{
+
+            }
+ //AIM 
             if (!UserManager.supportsMultipleUsers() || Utils.isMonkeyRunning()) {
                 caps.mEnabled = false;
                 return caps;
