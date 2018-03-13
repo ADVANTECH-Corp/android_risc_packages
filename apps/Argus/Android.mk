@@ -82,3 +82,19 @@ LOCAL_PRIVILEGED_MODULE := true
 include $(BUILD_PREBUILT)
 
 ################################################
+
+include $(CLEAR_VARS)
+
+# Module name should match apk name to be installed.
+LOCAL_MODULE :=ArgusSetTimer
+LOCAL_SRC_FILES := ArgusSetTimer.apk
+LOCAL_MODULE_CLASS := APPS
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
+
+LOCAL_PACKAGE_NAME :=ArgusSetTimer
+LOCAL_CERTIFICATE := shared
+LOCAL_PRIVILEGED_MODULE := true
+
+include $(BUILD_PREBUILT)
+
+################################################
