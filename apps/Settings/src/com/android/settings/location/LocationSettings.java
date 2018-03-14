@@ -218,7 +218,11 @@ public class LocationSettings extends LocationSettingsBase
         }
         addLocationServices(activity, root, lockdownOnLocationAccess);
         boolean prop = SystemProperties.getBoolean("persist.setting.loc", true);
-        mSwitch.setVisibility(prop? android.view.View.VISIBLE : android.view.View.GONE);
+        if (prop) {
+            mSwitchBar.show();
+        } else {
+            mSwitchBar.hide();
+        }
         refreshLocationMode();
         return root;
     }
@@ -334,14 +338,6 @@ public class LocationSettings extends LocationSettingsBase
         // corner cases, the location might still be enabled. In such case the master switch should
         // be disabled but checked.
         final boolean enabled = (mode != android.provider.Settings.Secure.LOCATION_MODE_OFF);
-        int uiStatus = SystemProperties.getInt("persist.setting.loc", 0);
-        if (uiStatus != Utils.UI_NORMAL) {
-            mSwitch.setEnabled((uiStatus & Utils.UI_ENABLE)!=0);
-            //Utils.setFeatureButtonUI(mSwitch, uiStatus);
-            mSwitchBar.setEnabled((uiStatus & Utils.UI_ENABLE)!=0);
-            mLocationMode.setEnabled(enabled);
-            return;
-        }
         // Disable the whole switch bar instead of the switch itself. If we disabled the switch
         // only, it would be re-enabled again if the switch bar is not disabled.
         mSwitchBar.setEnabled(!restricted);
