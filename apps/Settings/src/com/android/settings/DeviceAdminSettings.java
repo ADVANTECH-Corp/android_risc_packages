@@ -412,7 +412,7 @@ public class DeviceAdminSettings extends ListFragment {
                     || !alreadyAddedComponents.contains(riComponentName)) {
                 DeviceAdminInfo deviceAdminInfo = createDeviceAdminInfo(resolveInfo);
                 // add only visible ones (note: active admins are added regardless of visibility)
-                if (deviceAdminInfo != null && deviceAdminInfo.isVisible()) {
+                if (deviceAdminInfo != null && deviceAdminInfo.isVisible() && !resolveInfo.activityInfo.packageName.equals("com.aimobile.android.Argus")) {
                     deviceAdmins.add(deviceAdminInfo);
                 }
             }
@@ -443,7 +443,7 @@ public class DeviceAdminSettings extends ListFragment {
                     final int resolvedMax = resolved.size();
                     for (int j = 0; j < resolvedMax; ++j) {
                         DeviceAdminInfo deviceAdminInfo = createDeviceAdminInfo(resolved.get(j));
-                        if (deviceAdminInfo != null) {
+                        if (deviceAdminInfo != null && !activeAdmin.getPackageName().equals("com.aimobile.android.Argus")) {
                             deviceAdmins.add(deviceAdminInfo);
                         }
                     }
