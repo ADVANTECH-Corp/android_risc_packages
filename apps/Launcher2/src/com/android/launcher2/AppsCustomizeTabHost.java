@@ -35,6 +35,8 @@ import android.widget.TextView;
 
 import com.android.launcher.R;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class AppsCustomizeTabHost extends TabHost implements LauncherTransitionable,
@@ -126,7 +128,11 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona
         tabView = (TextView) mLayoutInflater.inflate(R.layout.tab_widget_indicator, tabs, false);
         tabView.setText(label);
         tabView.setContentDescription(label);
-        addTab(newTabSpec(WIDGETS_TAB_TAG).setIndicator(tabView).setContent(contentFactory));
+        //Kevin: Customization UI
+        String isWidgetTabHide = getSystemPropertyFromShell("persist.cust.widgetpage.hide");
+        if(!isWidgetTabHide.equalsIgnoreCase("true"))
+            addTab(newTabSpec(WIDGETS_TAB_TAG).setIndicator(tabView).setContent(contentFactory));
+        //~Kevin: Customization UI
         setOnTabChangedListener(this);
 
         // Setup the key listener to jump between the last tab view and the market icon
@@ -139,6 +145,30 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona
         // Hide the tab bar until we measure
         mTabsContainer.setAlpha(0f);
     }
+    
+    //Kevin
+    private String getSystemPropertyFromShell(String propertyName) {
+        if (propertyName == null || propertyName.trim().equals("")) return "";
+        String propertyValue = "";
+        try {
+            java.lang.Process process =
+                    new ProcessBuilder("/system/bin/getprop", propertyName).start();
+            // try-with-resources
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+                            process.getInputStream()))) {
+                    String line = bufferedReader.readLine();
+                    if (line != null) propertyValue = line.trim();
+            }
+            finally {
+                process.destroy();
+            }
+        } catch (java.io.IOException e) {
+            //Log.e(TAG, "Couldn't find the property value for '" + propertyName + "'");
+        }
+        //Log.e(TAG, "get " + propertyName + "=" + propertyValue);
+        return propertyValue;
+    }
+    //~Kevin
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

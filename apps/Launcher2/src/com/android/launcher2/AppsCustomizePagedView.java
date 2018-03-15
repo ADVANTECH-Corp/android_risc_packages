@@ -58,6 +58,8 @@ import android.widget.Toast;
 import com.android.launcher.R;
 import com.android.launcher2.DropTarget.DragObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -1337,13 +1339,17 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         cancelAllTasks();
 
         Context context = getContext();
-        for (int j = 0; j < mNumWidgetPages; ++j) {
-            PagedViewGridLayout layout = new PagedViewGridLayout(context, mWidgetCountX,
-                    mWidgetCountY);
-            setupPage(layout);
-            addView(layout, new PagedView.LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT));
+        //Kevin: Customization UI
+        String isWidgetTabHide = getSystemPropertyFromShell("persist.cust.widgetpage.hide");
+        if(!isWidgetTabHide.equalsIgnoreCase("true"))
+        {
+            for (int j = 0; j < mNumWidgetPages; ++j) {
+                PagedViewGridLayout layout = new PagedViewGridLayout(context, mWidgetCountX, mWidgetCountY);
+                setupPage(layout);
+                addView(layout, new PagedView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+           }
         }
+        //~Kevin
 
         for (int i = 0; i < mNumAppsPages; ++i) {
             PagedViewCellLayout layout = new PagedViewCellLayout(context);
@@ -1360,6 +1366,30 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             syncWidgetPageItems(page, immediate);
         }
     }
+    
+    //Kevin
+    private String getSystemPropertyFromShell(String propertyName) {
+        if (propertyName == null || propertyName.trim().equals("")) return "";
+        String propertyValue = "";
+        try {
+            java.lang.Process process =
+                    new ProcessBuilder("/system/bin/getprop", propertyName).start();
+            // try-with-resources
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+                            process.getInputStream()))) {
+                    String line = bufferedReader.readLine();
+                    if (line != null) propertyValue = line.trim();
+            }
+            finally {
+                process.destroy();
+            }
+        } catch (java.io.IOException e) {
+            //Log.e(TAG, "Couldn't find the property value for '" + propertyName + "'");
+        }
+        //Log.e(TAG, "get " + propertyName + "=" + propertyValue);
+        return propertyValue;
+    }
+    //~Kevin
 
     // We want our pages to be z-ordered such that the further a page is to the left, the higher
     // it is in the z-order. This is important to insure touch events are handled correctly.
