@@ -741,17 +741,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         if (!SystemProperties.getBoolean("persist.setting.dev.hwoverlay", true)) {
             mDevelopementSettings.removePreference(mDisableOverlays);
         }
-        //Disable HW overlay
-        writeDisableOverlaysOption();
-        //Stay awake
-        Settings.Global.putInt(getActivity().getContentResolver(),
-                    Settings.Global.STAY_ON_WHILE_PLUGGED_IN,
-                    mKeepScreenOn.isChecked() ?
-                            (BatteryManager.BATTERY_PLUGGED_AC | BatteryManager.BATTERY_PLUGGED_USB) : 0);
-        Settings.Global.putInt(getActivity().getContentResolver(),
-                        Settings.Global.ADB_ENABLED, mEnableAdb.isChecked() ? 1 : 0);
-        //Adb debugging
-        updateAllOptions();
     }
 
     @Override
