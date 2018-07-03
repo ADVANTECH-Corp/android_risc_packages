@@ -643,12 +643,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         }
 
         mSwitchBar.addOnSwitchChangeListener(this);
-        int uiDev = SystemProperties.getInt("persist.setting.dev", 0);
-        if (uiDev != Utils.UI_NORMAL) {
-            Switch s = mSwitchBar.getSwitch();
-            mSwitchBar.setEnabled((uiDev & Utils.UI_ENABLE)!=0);
-            s.setEnabled((uiDev & Utils.UI_ENABLE)!=0);
-        }
     }
 
     private boolean removePreferenceForProduction(Preference preference) {
@@ -719,18 +713,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         if (mColorModePreference != null) {
             mColorModePreference.startListening();
             mColorModePreference.updateCurrentAndSupported();
-        }
-        int uiDev = SystemProperties.getInt("persist.setting.dev", 0);
-        if (uiDev != Utils.UI_NORMAL) {
-            boolean enable = (uiDev & Utils.UI_ON)!=0;
-            Switch s = mSwitchBar.getSwitch();
-            mSwitchBar.setChecked(enable);
-            s.setChecked(enable);
-
-            Settings.Global.putInt(getActivity().getContentResolver(),
-                    Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, enable ? 1 : 0);
-            setPrefsEnabledState(enable);
-            mLastEnabledState = enable;
         }
         if (!SystemProperties.getBoolean("persist.setting.dev.stayawake", true)) {
             mDevelopementSettings.removePreference(mKeepScreenOn);
