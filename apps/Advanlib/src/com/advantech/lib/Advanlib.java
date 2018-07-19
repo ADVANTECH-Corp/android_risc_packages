@@ -232,8 +232,6 @@ public class Advanlib {
             return availMemory;
 	}
     }
-	
-    
     private Context mContext;
     private IAdvSdkService mAdvSdkService;
     private AdvSdklib mAdvSdklib;
@@ -246,6 +244,14 @@ public class Advanlib {
     }
 
     //Advlib api
+	//jinxin added for async install apk
+	public void installApplicationAsync(String pathFile, AdvSdklib.advCallback callback){
+		try {
+			mAdvSdklib.installApplicationAsync(pathFile, callback);
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}     
+	}
 
 /********************************************** UI ************************************************************/
 
