@@ -326,6 +326,23 @@ public class Advanlib {
 		return result;
     }
 
+	/**
+     * Start or Stop androidvncserver 
+     */
+    public void startVncServer(String passwd){
+        try {
+            mAdvSdkService.startVncServer(passwd);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+	public void stopVncServer(){
+        try {
+            mAdvSdkService.stopVncServer();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Show or hide recent button on navigation bar 
