@@ -329,19 +329,23 @@ public class Advanlib {
 	/**
      * Start or Stop androidvncserver 
      */
-    public void startVncServer(String passwd){
-        try {
-            mAdvSdkService.startVncServer(passwd);
+    public boolean startVncServer(String passwd){
+        boolean result = false;
+		try {
+            result = mAdvSdkService.startVncServer(passwd);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+		return result;
     }
-	public void stopVncServer(){
-        try {
-            mAdvSdkService.stopVncServer();
+	public boolean stopVncServer(){
+        boolean result = false;
+		try {
+            result = mAdvSdkService.stopVncServer();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+		return result;
     }
 
     /**
