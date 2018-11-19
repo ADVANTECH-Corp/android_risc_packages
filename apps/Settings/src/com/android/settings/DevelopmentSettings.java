@@ -720,6 +720,25 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         if (!SystemProperties.getBoolean("persist.setting.dev.adb", true)) {
             mDevelopementSettings.removePreference(mEnableAdb);
         }
+        // AIM_Android 2.1 +++
+        if (!SystemProperties.getBoolean("persist.setting.usb.debug.val", true)) {
+            // Log.d(TAG, "AIM persist.setting.dev.adb.val -> false");
+            Settings.Global.putInt(getActivity().getContentResolver(),
+                Settings.Global.ADB_ENABLED, 0);
+            mVerifyAppsOverUsb.setEnabled(false);
+            mVerifyAppsOverUsb.setChecked(false);
+            mEnableAdb.setChecked(false);
+            updateBugreportOptions();
+        } else {
+            // Log.d(TAG, "AIM persist.setting.dev.adb.val -> true");
+            Settings.Global.putInt(getActivity().getContentResolver(),
+                        Settings.Global.ADB_ENABLED, 1);
+            mVerifyAppsOverUsb.setEnabled(true);
+            updateVerifyAppsOverUsbOptions();
+            mEnableAdb.setChecked(true);
+            updateBugreportOptions();
+        }
+        // AIM Android 2.1 ---
         if (!SystemProperties.getBoolean("persist.setting.dev.hwoverlay", true)) {
             mDevelopementSettings.removePreference(mDisableOverlays);
         }
