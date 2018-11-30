@@ -382,6 +382,7 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
 
         if(SystemProperties.getBoolean("persist.setting.clr.invert.ui",true)) {
             //Log.i("=AIM=AccessibilitySettings","Show TOGGLE_INVERSION_PREFERENCE");
+        } else {
             mDisplayCategory.removePreference(mToggleInversionPreference);
             //Log.i("=AIM=AccessibilitySettings","Remove TOGGLE_INVERSION_PREFERENCE");
         }
