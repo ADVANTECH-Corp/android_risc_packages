@@ -1276,6 +1276,12 @@ public class SettingsActivity extends Activity
                     if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI)) {
                         removeTile = true;
                     }
+                    //AIM_Android 2.1 +++
+                    String dontshow= SystemProperties.get("persist.cust.btn.wifi.hide");
+                    if ("true".equals(dontshow)) {
+                        removeTile = true;
+                    }
+                    //AIM_Android 2.1 ---
                 } else if (id == R.id.bluetooth_settings) {
                     // Remove Bluetooth Settings if Bluetooth service is not available.
                     if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
