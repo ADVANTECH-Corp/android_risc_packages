@@ -629,6 +629,13 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         if (pref == null) {
             throw new IllegalArgumentException("Cannot find preference with key = " + key);
         }
+        //AIM_Android 2.1 +++
+        if(key.equals(KEEP_SCREEN_ON) && SystemProperties.getBoolean("persist.cust.btn.awake.hide",false))
+        {
+            removePreference(pref);
+            return pref;
+        }
+        //AIM_Android 2.1 ---
         mAllPrefs.add(pref);
         mResetSwitchPrefs.add(pref);
         return pref;
