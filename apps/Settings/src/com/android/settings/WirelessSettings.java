@@ -223,7 +223,14 @@ public class WirelessSettings extends SettingsPreferenceFragment implements Inde
         mPm = getPackageManager();
         mUm = (UserManager) getSystemService(Context.USER_SERVICE);
 
-        addPreferencesFromResource(R.xml.wireless_settings);
+        //AIM_Android 2.1 +++
+        String dontshow=SystemProperties.get("persist.cust.btn.flymo.disabled");
+        if ("true".equals(dontshow)) {
+            addPreferencesFromResource(R.xml.wireless_settings_disable_airplane);
+        }else{
+            addPreferencesFromResource(R.xml.wireless_settings);
+        }
+        //AIM_Android 2.1 ---
 
         final int myUserId = UserHandle.myUserId();
         final boolean isSecondaryUser = myUserId != UserHandle.USER_OWNER;
