@@ -356,6 +356,10 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         final PreferenceGroup debugDebuggingCategory = (PreferenceGroup)
                 findPreference(DEBUG_DEBUGGING_CATEGORY_KEY);
         mEnableAdb = findAndInitSwitchPref(ENABLE_ADB);
+        //AIM_Android 2.1 +++
+        if(!SystemProperties.getBoolean("persist.setting.usb.debug.ui",true))
+            debugDebuggingCategory.removePreference(mEnableAdb);
+        //AIM_Android 2.1 ---
         mClearAdbKeys = findPreference(CLEAR_ADB_KEYS);
         if (!SystemProperties.getBoolean("ro.adb.secure", false)) {
             if (debugDebuggingCategory != null) {
