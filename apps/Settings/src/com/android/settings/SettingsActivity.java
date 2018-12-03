@@ -1287,6 +1287,12 @@ public class SettingsActivity extends Activity
                     if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
                         removeTile = true;
                     }
+                    //AIM_Android 2.1 +++
+                    String dontshow= SystemProperties.get("persist.cust.btn.bt.hide");
+                    if ("true".equals(dontshow)) {
+                        removeTile = true;
+                    }
+                    //AIM_Android 2.1 ---
                 } else if (id == R.id.data_usage_settings) {
                     // Remove data usage when kernel module not enabled
                     if (!Utils.isBandwidthControlEnabled()) {
