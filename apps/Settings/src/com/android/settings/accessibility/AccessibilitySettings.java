@@ -361,8 +361,12 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
         mSystemsCategory = (PreferenceCategory) findPreference(SYSTEM_CATEGORY);
 
         // Large text.
+        //AIM_Android 2.1 +++
         mToggleLargeTextPreference =
-                (SwitchPreference) findPreference(TOGGLE_LARGE_TEXT_PREFERENCE);
+            (SwitchPreference) findPreference(TOGGLE_LARGE_TEXT_PREFERENCE);
+        if(SystemProperties.getBoolean("persist.cust.btn.largetext.hide",false))
+            mSystemsCategory.removePreference(mToggleLargeTextPreference);
+        //AIM_Android 2.1 ---
 
         // Text contrast.
         //AIM
