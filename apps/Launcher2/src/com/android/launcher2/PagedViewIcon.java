@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.widget.TextView;
+import android.os.SystemProperties; //AIM_Android 2.1
 
 /**
  * An icon on a PagedView, specifically for items in the launcher's paged view (with compound
@@ -58,6 +59,9 @@ public class PagedViewIcon extends TextView {
         mPressedCallback = cb;
         setCompoundDrawablesWithIntrinsicBounds(null, new FastBitmapDrawable(mIcon), null, null);
         setText(info.title);
+        int size = SystemProperties.getInt("persist.launcher.font.size", -1);
+        if (size != -1)
+            setTextSize(size);
         if (info.contentDescription != null) {
             setContentDescription(info.contentDescription);
         }
