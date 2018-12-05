@@ -18,6 +18,7 @@ package com.android.launcher2;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.SystemProperties; //AIM_Android 2.1
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -62,10 +63,16 @@ public class PagedViewCellLayout extends ViewGroup implements Page {
 
         // setup default cell parameters
         Resources resources = context.getResources();
-        mOriginalCellWidth = mCellWidth =
+        //AIM_Android 2.1 +++
+        mOriginalCellHeight = mCellHeight = mOriginalCellWidth = mCellWidth = SystemProperties.getInt("persist.launcher.icon.space", -1);
+        if (mOriginalCellWidth == -1)
+        {
+            mOriginalCellWidth = mCellWidth =
             resources.getDimensionPixelSize(R.dimen.apps_customize_cell_width);
-        mOriginalCellHeight = mCellHeight =
+            mOriginalCellHeight = mCellHeight =
             resources.getDimensionPixelSize(R.dimen.apps_customize_cell_height);
+        }
+        //AIM_Android 2.1 ---
         mCellCountX = LauncherModel.getCellCountX();
         mCellCountY = LauncherModel.getCellCountY();
         mOriginalWidthGap = mOriginalHeightGap = mWidthGap = mHeightGap = -1;
