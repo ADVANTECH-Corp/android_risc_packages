@@ -1975,6 +1975,12 @@ public class Workspace extends SmoothPagedView
         // If it's an external drop (e.g. from All Apps), check if it should be accepted
         CellLayout dropTargetLayout = mDropToLayout;
         if (d.dragSource != this) {
+            //AIM_Android 2.1 +++
+            if (mLauncher.isHotseatLayout(dropTargetLayout))
+                if (!SystemProperties.getBoolean("persist.launcher.dockbar.icon", true))
+                    return false;
+            //AIM_Android 2.1 ---
+            
             // Don't accept the drop if we're not over a screen at time of drop
             if (dropTargetLayout == null) {
                 return false;
@@ -2265,7 +2271,7 @@ public class Workspace extends SmoothPagedView
                     snapToPage(screen);
                 }
 
-                if (foundCell) {
+                if (SystemProperties.getBoolean("persist.launcher.dockbar.icon", true) && foundCell) {
                     final ItemInfo info = (ItemInfo) cell.getTag();
                     if (hasMovedLayouts) {
                         // Reparent the view
