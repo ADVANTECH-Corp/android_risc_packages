@@ -148,8 +148,8 @@ public final class Launcher extends Activity
 
     static final String EXTRA_SHORTCUT_DUPLICATE = "duplicate";
 
-    static final int SCREEN_COUNT = 5;
-    static final int DEFAULT_SCREEN = 2;
+    public static int SCREEN_COUNT = 5; //AIM_Android 2.1
+    public static int DEFAULT_SCREEN = 2; //AIM_Android 2.1
 
     private static final String PREFERENCES = "launcher.preferences";
     // To turn on these properties, type
@@ -1024,6 +1024,21 @@ public final class Launcher extends Activity
         mWorkspace = (Workspace) mDragLayer.findViewById(R.id.workspace);
         mQsbDivider = findViewById(R.id.qsb_divider);
         mDockDivider = findViewById(R.id.dock_divider);
+        
+        //AIM_Android 2.1 +++
+        int screen_count = SystemProperties.getInt("persist.launcher.adj_count", 5);
+        if (screen_count > 5)
+            screen_count = 5;
+        else if (screen_count <= 0)
+            screen_count = 1;
+        SCREEN_COUNT = screen_count;
+        DEFAULT_SCREEN = screen_count / 2;
+        LayoutInflater factory = LayoutInflater.from(this);
+        for (int i = 0; i < screen_count; i++) {
+            View myView = factory.inflate(R.layout.workspace_screen, null);
+            mWorkspace.addView(myView);
+        }
+        //AIM_Android 2.1 ---
 
         mLauncherView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         mWorkspaceBackgroundDrawable = getResources().getDrawable(R.drawable.workspace_bg);

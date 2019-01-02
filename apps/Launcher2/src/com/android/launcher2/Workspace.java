@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import android.os.SystemProperties; //AIM_Android 2.1
 
 /**
  * The workspace is a wide area with a wallpaper and a finite number of pages.
@@ -332,7 +333,15 @@ public class Workspace extends SmoothPagedView
         // if the value is manually specified, use that instead
         cellCountX = a.getInt(R.styleable.Workspace_cellCountX, cellCountX);
         cellCountY = a.getInt(R.styleable.Workspace_cellCountY, cellCountY);
-        mDefaultPage = a.getInt(R.styleable.Workspace_defaultScreen, 1);
+        //AIM_Android 2.1 +++
+        int workspace_count = SystemProperties.getInt("persist.launcher.adj_count", 5);
+        if (workspace_count > 5)
+            mDefaultPage = 2; // 5/2
+        else if (workspace_count <= 0)
+            mDefaultPage = 0;
+        else
+            mDefaultPage = workspace_count / 2;
+        //AIM_Android 2.1 ---
         a.recycle();
 
         setOnHierarchyChangeListener(this);

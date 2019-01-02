@@ -64,11 +64,15 @@
             launcher:scrollIndicatorPaddingLeft="@dimen/workspace_divider_padding_left"
             launcher:scrollIndicatorPaddingRight="@dimen/workspace_divider_padding_right">
 
+<!-- AIM_Android 2.1 -->
+<!--
             <include android:id="@+id/cell1" layout="@layout/workspace_screen" />
             <include android:id="@+id/cell2" layout="@layout/workspace_screen" />
             <include android:id="@+id/cell3" layout="@layout/workspace_screen" />
             <include android:id="@+id/cell4" layout="@layout/workspace_screen" />
             <include android:id="@+id/cell5" layout="@layout/workspace_screen" />
+-->
+<!-- AIM_Android 2.1 -->
         </com.android.launcher2.Workspace>
 
         <include layout="@layout/hotseat"
