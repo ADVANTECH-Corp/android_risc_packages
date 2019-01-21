@@ -201,6 +201,16 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     }
 
     // Accessed from the settings interface, hence public
+    // AIM_Android 2.1.1 +++
+    public static boolean readKeyAutoCapitalizeEnabled(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_AUTO_CAP, true);
+    }
+    public static void writeKeyAutoCapitalizeEnabled(final SharedPreferences prefs, final Boolean prefs_autocap) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(Settings.PREF_AUTO_CAP, prefs_autocap);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
     public static boolean readKeypressSoundEnabled(final SharedPreferences prefs,
             final Resources res) {
         return prefs.getBoolean(PREF_SOUND_ON,

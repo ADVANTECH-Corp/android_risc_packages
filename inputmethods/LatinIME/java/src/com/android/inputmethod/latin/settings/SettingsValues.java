@@ -39,6 +39,8 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import android.os.SystemProperties; //AIM_Android 2.1.1
+
 /**
  * When you call the constructor of this class, you may want to change the current system locale by
  * using {@link com.android.inputmethod.latin.utils.RunInLocale}.
@@ -52,6 +54,8 @@ public class SettingsValues {
     private static final String FLOAT_NEGATIVE_INFINITY_MARKER_STRING = "floatNegativeInfinity";
     private static final int TIMEOUT_TO_GET_TARGET_PACKAGE = 5; // seconds
     public static final float DEFAULT_SIZE_SCALE = 1.0f; // 100%
+    
+    private static boolean firstSet = true; //AIM_Android 2.1.1
 
     // From resources:
     public final SpacingAndPunctuations mSpacingAndPunctuations;
@@ -131,7 +135,14 @@ public class SettingsValues {
         mInputAttributes = inputAttributes;
 
         // Get the settings preferences
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_autocap = SystemProperties.getBoolean("persist.cust.kb.auto_cap",true);
+            Settings.writeKeyAutoCapitalizeEnabled(prefs, prop_autocap);
+        }
         mAutoCap = prefs.getBoolean(Settings.PREF_AUTO_CAP, true);
+//         Log.d(TAG, "mAutoCap: " + mAutoCap);
+        // AIM_Android 2.1.1 ---
         mVibrateOn = Settings.readVibrationEnabled(prefs, res);
         mSoundOn = Settings.readKeypressSoundEnabled(prefs, res);
         mKeyPreviewPopupOn = Settings.readKeyPreviewPopupEnabled(prefs, res);
@@ -221,6 +232,9 @@ public class SettingsValues {
         } else {
             new TargetPackageInfoGetterTask(context, mAppWorkarounds)
                     .execute(mInputAttributes.mTargetApplicationPackageName);
+        }
+        if (firstSet) {
+            firstSet = false;
         }
     }
 

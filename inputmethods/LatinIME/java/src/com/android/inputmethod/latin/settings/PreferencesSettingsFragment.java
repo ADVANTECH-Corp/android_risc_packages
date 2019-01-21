@@ -27,6 +27,8 @@ import com.android.inputmethod.latin.AudioAndHapticFeedbackManager;
 import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.RichInputMethodManager;
 
+import android.os.SystemProperties; //AIM_Android 2.1.1
+
 /**
  * "Preferences" settings sub screen.
  *
@@ -86,9 +88,14 @@ public final class PreferencesSettingsFragment extends SubScreenFragment {
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
         final Resources res = getResources();
+//         Log.d(TAG, "onSharedPreferenceChanged key: " + key);
         if (key.equals(Settings.PREF_POPUP_ON)) {
             setPreferenceEnabled(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
                     Settings.readKeyPreviewPopupEnabled(prefs, res));
+        }
+        if (key.equals(Settings.PREF_AUTO_CAP)) {
+//             Log.d(TAG, "readKeyAutoCapitalizeEnabled: " + Settings.readKeyAutoCapitalizeEnabled(prefs));
+            SystemProperties.set("persist.cust.kb.auto_cap", Settings.readKeyAutoCapitalizeEnabled(prefs)? "true" : "false");
         }
         refreshEnablingsOfKeypressSoundAndVibrationSettings();
     }
