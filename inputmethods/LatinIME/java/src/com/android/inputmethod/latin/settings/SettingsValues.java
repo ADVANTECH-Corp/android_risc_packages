@@ -158,8 +158,14 @@ public class SettingsValues {
                 ? Settings.readShowsLanguageSwitchKey(prefs) : true /* forcibly */;
         mUseContactsDict = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true);
         mUsePersonalizedDicts = prefs.getBoolean(Settings.PREF_KEY_USE_PERSONALIZED_DICTS, true);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_double_space_period = SystemProperties.getBoolean("persist.cust.kb.double_period",true);
+            Settings.writeKeyDoubleSpacePeriod(prefs, prop_double_space_period);
+        }
         mUseDoubleSpacePeriod = prefs.getBoolean(Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true)
                 && inputAttributes.mIsGeneralTextInput;
+        // AIM_Android 2.1.1 ---
         mBlockPotentiallyOffensive = Settings.readBlockPotentiallyOffensive(prefs, res);
         mAutoCorrectEnabled = Settings.readAutoCorrectEnabled(prefs, res);
         final String autoCorrectionThresholdRawValue = mAutoCorrectEnabled

@@ -207,7 +207,15 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     }
     public static void writeKeyAutoCapitalizeEnabled(final SharedPreferences prefs, final Boolean prefs_autocap) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(Settings.PREF_AUTO_CAP, prefs_autocap);
+        editor.putBoolean(PREF_AUTO_CAP, prefs_autocap);
+        editor.apply();
+    }
+    public static boolean readKeyDoubleSpacePeriod(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true);
+    }
+    public static void writeKeyDoubleSpacePeriod(final SharedPreferences prefs, final Boolean pref_double_space_period) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_KEY_USE_DOUBLE_SPACE_PERIOD, pref_double_space_period);
         editor.apply();
     }
     // AIM_Android 2.1.1 ---

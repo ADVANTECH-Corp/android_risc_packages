@@ -28,6 +28,7 @@ import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.RichInputMethodManager;
 
 import android.os.SystemProperties; //AIM_Android 2.1.1
+import android.util.Log;
 
 /**
  * "Preferences" settings sub screen.
@@ -41,6 +42,8 @@ import android.os.SystemProperties; //AIM_Android 2.1.1
  * - Voice input key
  */
 public final class PreferencesSettingsFragment extends SubScreenFragment {
+
+    private static final String TAG = "PreferencesSettingsFragment";
 
     private static final boolean VOICE_IME_ENABLED =
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
@@ -93,10 +96,16 @@ public final class PreferencesSettingsFragment extends SubScreenFragment {
             setPreferenceEnabled(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
                     Settings.readKeyPreviewPopupEnabled(prefs, res));
         }
+        // AIM_Android 2.1.1 +++
         if (key.equals(Settings.PREF_AUTO_CAP)) {
 //             Log.d(TAG, "readKeyAutoCapitalizeEnabled: " + Settings.readKeyAutoCapitalizeEnabled(prefs));
             SystemProperties.set("persist.cust.kb.auto_cap", Settings.readKeyAutoCapitalizeEnabled(prefs)? "true" : "false");
         }
+        if (key.equals(Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD)) {
+//             Log.d(TAG, "set Prop: " + Settings.readKeyDoubleSpacePeriod(prefs));
+            SystemProperties.set("persist.cust.kb.double_period", Settings.readKeyDoubleSpacePeriod(prefs)? "true" : "false");
+        }
+        // AIM_Android 2.1.1 ---
         refreshEnablingsOfKeypressSoundAndVibrationSettings();
     }
 
