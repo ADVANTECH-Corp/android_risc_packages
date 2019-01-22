@@ -105,6 +105,10 @@ public final class PreferencesSettingsFragment extends SubScreenFragment {
 //             Log.d(TAG, "set Prop: " + Settings.readKeyDoubleSpacePeriod(prefs));
             SystemProperties.set("persist.cust.kb.double_period", Settings.readKeyDoubleSpacePeriod(prefs)? "true" : "false");
         }
+        if (key.equals(Settings.PREF_SOUND_ON)) {
+//             Log.d(TAG, "sound_on set Prop: " + Settings.readKeypressSoundEnabled(prefs, res));
+            SystemProperties.set("persist.cust.kb.key_sound", Settings.readKeypressSoundEnabled(prefs, res)? "true" : "false");
+        }
         // AIM_Android 2.1.1 ---
         refreshEnablingsOfKeypressSoundAndVibrationSettings();
     }

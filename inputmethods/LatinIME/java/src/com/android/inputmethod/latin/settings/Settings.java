@@ -224,6 +224,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         return prefs.getBoolean(PREF_SOUND_ON,
                 res.getBoolean(R.bool.config_default_sound_enabled));
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeKeypressSoundEnabled(final SharedPreferences prefs,
+            final Boolean pref_sound_enabled) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_SOUND_ON, pref_sound_enabled);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static boolean readVibrationEnabled(final SharedPreferences prefs,
             final Resources res) {

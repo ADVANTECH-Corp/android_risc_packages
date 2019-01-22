@@ -144,7 +144,13 @@ public class SettingsValues {
 //         Log.d(TAG, "mAutoCap: " + mAutoCap);
         // AIM_Android 2.1.1 ---
         mVibrateOn = Settings.readVibrationEnabled(prefs, res);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_sound_enabled = SystemProperties.getBoolean("persist.cust.kb.key_sound",true);
+            Settings.writeKeypressSoundEnabled(prefs, prop_sound_enabled);
+        }
         mSoundOn = Settings.readKeypressSoundEnabled(prefs, res);
+        // AIM_Android 2.1.1 ---
         mKeyPreviewPopupOn = Settings.readKeyPreviewPopupEnabled(prefs, res);
         mSlidingKeyInputPreviewEnabled = prefs.getBoolean(
                 DebugSettings.PREF_SLIDING_KEY_INPUT_PREVIEW, true);
