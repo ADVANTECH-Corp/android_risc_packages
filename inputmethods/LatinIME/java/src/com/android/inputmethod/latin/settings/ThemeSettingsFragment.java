@@ -26,6 +26,8 @@ import com.android.inputmethod.keyboard.KeyboardTheme;
 import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.settings.RadioButtonPreference.OnRadioButtonClickedListener;
 
+import android.os.SystemProperties; //AIM_Android 2.1.1
+
 /**
  * "Keyboard theme" settings sub screen.
  */
@@ -81,6 +83,7 @@ public final class ThemeSettingsFragment extends SubScreenFragment
         if (preference instanceof KeyboardThemePreference) {
             final KeyboardThemePreference pref = (KeyboardThemePreference)preference;
             mSelectedThemeId = pref.mThemeId;
+            SystemProperties.set("persist.cust.kb.theme", Integer.toString(mSelectedThemeId)); // AIM_Android 2.1.1
             updateSelected();
         }
     }

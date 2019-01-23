@@ -29,6 +29,8 @@ import com.android.inputmethod.latin.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import android.os.SystemProperties; //AIM_Android 2.1.1
+
 public final class KeyboardTheme implements Comparable<KeyboardTheme> {
     private static final String TAG = KeyboardTheme.class.getSimpleName();
 
@@ -134,12 +136,16 @@ public final class KeyboardTheme implements Comparable<KeyboardTheme> {
             prefs.edit().remove(KLP_KEYBOARD_THEME_KEY).apply();
         }
         // TODO: This search algorithm isn't optimal if there are many themes.
-        for (final KeyboardTheme theme : availableThemeArray) {
-            if (sdkVersion >= theme.mMinApiVersion) {
-                return theme;
-            }
-        }
-        return searchKeyboardThemeById(DEFAULT_THEME_ID, availableThemeArray);
+//         for (final KeyboardTheme theme : availableThemeArray) {
+//             if (sdkVersion >= theme.mMinApiVersion) {
+//                 return theme;
+//             }
+//         }
+//         return searchKeyboardThemeById(DEFAULT_THEME_ID, availableThemeArray);
+        final int prop_themeId = SystemProperties.getInt("persist.cust.kb.theme", 3); // AIM_Android 2.1.1
+        Log.d(TAG, "default themeId: " + prop_themeId);
+        final KeyboardTheme prop_theme = searchKeyboardThemeById(prop_themeId, availableThemeArray);
+        return prop_theme;
     }
 
     public static String getKeyboardThemeName(final int themeId) {
@@ -199,7 +205,8 @@ public final class KeyboardTheme implements Comparable<KeyboardTheme> {
             return getDefaultKeyboardTheme(prefs, sdkVersion, availableThemeArray);
         }
         try {
-            final int themeId = Integer.parseInt(lxxThemeIdString);
+//             final int themeId = Integer.parseInt(lxxThemeIdString);
+            final int themeId = SystemProperties.getInt("persist.cust.kb.theme", 3); // AIM_Android 2.1.1
             final KeyboardTheme theme = searchKeyboardThemeById(themeId, availableThemeArray);
             if (theme != null) {
                 return theme;
