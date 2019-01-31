@@ -218,6 +218,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         editor.putBoolean(PREF_KEY_USE_DOUBLE_SPACE_PERIOD, pref_double_space_period);
         editor.apply();
     }
+    public static boolean readKeyEnableSplitKeyboard(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_ENABLE_SPLIT_KEYBOARD, false);
+    }
+    public static void writeKeyEnableSplitKeyboard(final SharedPreferences prefs, final Boolean pref_enable_split_keyboard) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_ENABLE_SPLIT_KEYBOARD, pref_enable_split_keyboard);
+        editor.apply();
+    }
     // AIM_Android 2.1.1 ---
     public static boolean readKeypressSoundEnabled(final SharedPreferences prefs,
             final Resources res) {

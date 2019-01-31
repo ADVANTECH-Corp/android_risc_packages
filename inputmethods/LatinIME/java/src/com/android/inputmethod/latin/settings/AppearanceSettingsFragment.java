@@ -22,10 +22,21 @@ import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.common.Constants;
 import com.android.inputmethod.latin.define.ProductionFlags;
 
+//AIM_Android 2.1.1 +++
+import android.os.SystemProperties; 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.util.Log;
+//AIM_Android 2.1.1 ---
+
 /**
  * "Appearance" settings sub screen.
  */
 public final class AppearanceSettingsFragment extends SubScreenFragment {
+
+    private static final String TAG = "AppearanceSettingsFragment";
+
     @Override
     public void onCreate(final Bundle icicle) {
         super.onCreate(icicle);
@@ -35,6 +46,17 @@ public final class AppearanceSettingsFragment extends SubScreenFragment {
             removePreference(Settings.PREF_ENABLE_SPLIT_KEYBOARD);
         }
     }
+    
+    // AIM_Android 2.1.1 +++
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
+        final Resources res = getResources();
+//         Log.d(TAG, "onSharedPreferenceChanged key: " + key);
+        if (key.equals(Settings.PREF_ENABLE_SPLIT_KEYBOARD)) {
+            SystemProperties.set("persist.cust.kb.split", Settings.readKeyEnableSplitKeyboard(prefs)? "true" : "false");
+        }
+    }
+    // AIM_Android 2.1.1 ---
 
     @Override
     public void onResume() {

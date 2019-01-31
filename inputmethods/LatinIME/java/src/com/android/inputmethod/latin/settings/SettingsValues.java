@@ -181,7 +181,13 @@ public class SettingsValues {
         mDoubleSpacePeriodTimeout = res.getInteger(R.integer.config_double_space_period_timeout);
         mHasHardwareKeyboard = Settings.readHasHardwareKeyboard(res.getConfiguration());
         mEnableMetricsLogging = prefs.getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_split_keyboard = SystemProperties.getBoolean("persist.cust.kb.split",false);
+            Settings.writeKeyEnableSplitKeyboard(prefs, prop_split_keyboard);
+        }
         mIsSplitKeyboardEnabled = prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD, false);
+        // AIM_Android 2.1.1 ---
         mScreenMetrics = Settings.readScreenMetrics(res);
 
         mShouldShowLxxSuggestionUi = Settings.SHOULD_SHOW_LXX_SUGGESTION_UI
