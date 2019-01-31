@@ -262,6 +262,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         return prefs.getBoolean(PREF_BLOCK_POTENTIALLY_OFFENSIVE,
                 res.getBoolean(R.bool.config_block_potentially_offensive));
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeBlockPotentiallyOffensive(final SharedPreferences prefs,
+            final Boolean pref_block_potentially_offensive) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_BLOCK_POTENTIALLY_OFFENSIVE, pref_block_potentially_offensive);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static boolean readFromBuildConfigIfGestureInputEnabled(final Resources res) {
         return res.getBoolean(R.bool.config_gesture_input_enabled_by_build_config);

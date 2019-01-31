@@ -172,7 +172,13 @@ public class SettingsValues {
         mUseDoubleSpacePeriod = prefs.getBoolean(Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true)
                 && inputAttributes.mIsGeneralTextInput;
         // AIM_Android 2.1.1 ---
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_block_potentially_offensive = SystemProperties.getBoolean("persist.cust.kb.block",true);
+            Settings.writeBlockPotentiallyOffensive(prefs, prop_block_potentially_offensive);
+        }
         mBlockPotentiallyOffensive = Settings.readBlockPotentiallyOffensive(prefs, res);
+        // AIM_Android 2.1.1 ---
         mAutoCorrectEnabled = Settings.readAutoCorrectEnabled(prefs, res);
         final String autoCorrectionThresholdRawValue = mAutoCorrectEnabled
                 ? res.getString(R.string.auto_correction_threshold_mode_index_modest)

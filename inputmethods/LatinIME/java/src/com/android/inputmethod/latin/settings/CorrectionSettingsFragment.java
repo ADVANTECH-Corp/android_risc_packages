@@ -37,6 +37,12 @@ import com.android.inputmethod.latin.userdictionary.UserDictionaryList;
 import com.android.inputmethod.latin.userdictionary.UserDictionarySettings;
 
 import java.util.TreeSet;
+//AIM_Android 2.1.1 +++
+import android.os.SystemProperties;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.util.Log;
+//AIM_Android 2.1.1 ---
 
 /**
  * "Text correction" settings sub screen.
@@ -61,6 +67,8 @@ public final class CorrectionSettingsFragment extends SubScreenFragment
             || Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2;
 
     private SwitchPreference mUseContactsPreference;
+
+    private static final String TAG = "CorrectionSettingsFragment";
 
     @Override
     public void onCreate(final Bundle icicle) {
@@ -118,6 +126,13 @@ public final class CorrectionSettingsFragment extends SubScreenFragment
 
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+        // AIM_Android 2.1.1 +++
+        final Resources res = getResources();
+//         Log.d(TAG, "onSharedPreferenceChanged key: " + key);
+        if (key.equals(Settings.PREF_BLOCK_POTENTIALLY_OFFENSIVE)) {
+            SystemProperties.set("persist.cust.kb.block", Settings.readBlockPotentiallyOffensive(sharedPreferences, res)? "true" : "false");
+        }
+        // AIM_Android 2.1.1 ---
         if (!TextUtils.equals(key, Settings.PREF_KEY_USE_CONTACTS_DICT)) {
             return;
         }
