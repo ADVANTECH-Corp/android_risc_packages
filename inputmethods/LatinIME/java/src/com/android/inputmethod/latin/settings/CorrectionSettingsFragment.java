@@ -132,6 +132,9 @@ public final class CorrectionSettingsFragment extends SubScreenFragment
         if (key.equals(Settings.PREF_BLOCK_POTENTIALLY_OFFENSIVE)) {
             SystemProperties.set("persist.cust.kb.block", Settings.readBlockPotentiallyOffensive(sharedPreferences, res)? "true" : "false");
         }
+        if (key.equals(Settings.PREF_AUTO_CORRECTION)) {
+            SystemProperties.set("persist.cust.kb.auto_corr", Settings.readAutoCorrectEnabled(sharedPreferences, res)? "true" : "false");
+        }
         // AIM_Android 2.1.1 ---
         if (!TextUtils.equals(key, Settings.PREF_KEY_USE_CONTACTS_DICT)) {
             return;

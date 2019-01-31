@@ -252,6 +252,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
             final Resources res) {
         return prefs.getBoolean(PREF_AUTO_CORRECTION, true);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeAutoCorrectEnabled(final SharedPreferences prefs,
+            final Boolean pref_auto_correct_enable) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_AUTO_CORRECTION, pref_auto_correct_enable);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static float readPlausibilityThreshold(final Resources res) {
         return Float.parseFloat(res.getString(R.string.plausibility_threshold));

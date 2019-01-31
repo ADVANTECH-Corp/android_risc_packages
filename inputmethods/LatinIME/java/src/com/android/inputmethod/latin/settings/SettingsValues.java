@@ -178,8 +178,12 @@ public class SettingsValues {
             Settings.writeBlockPotentiallyOffensive(prefs, prop_block_potentially_offensive);
         }
         mBlockPotentiallyOffensive = Settings.readBlockPotentiallyOffensive(prefs, res);
-        // AIM_Android 2.1.1 ---
+        if (firstSet) {
+            boolean prop_auto_correct_enable = SystemProperties.getBoolean("persist.cust.kb.auto_corr",true);
+            Settings.writeAutoCorrectEnabled(prefs, prop_auto_correct_enable);
+        }
         mAutoCorrectEnabled = Settings.readAutoCorrectEnabled(prefs, res);
+        // AIM_Android 2.1.1 ---
         final String autoCorrectionThresholdRawValue = mAutoCorrectEnabled
                 ? res.getString(R.string.auto_correction_threshold_mode_index_modest)
                 : res.getString(R.string.auto_correction_threshold_mode_index_off);
