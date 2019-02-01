@@ -223,7 +223,13 @@ public class SettingsValues {
                 && prefs.getBoolean(Settings.PREF_GESTURE_FLOATING_PREVIEW_TEXT, true);
         mAutoCorrectionEnabledPerUserSettings = mAutoCorrectEnabled
                 && !mInputAttributes.mInputTypeNoAutoCorrect;
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_suggestion_enable = SystemProperties.getBoolean("persist.cust.kb.corr_sugg",true);
+            writeSuggestionsEnabled(prefs, prop_suggestion_enable);
+        }
         mSuggestionsEnabledPerUserSettings = readSuggestionsEnabled(prefs);
+        // AIM_Android 2.1.1 ---
         mIsInternal = Settings.isInternal(prefs);
         mHasCustomKeyPreviewAnimationParams = prefs.getBoolean(
                 DebugSettings.PREF_HAS_CUSTOM_KEY_PREVIEW_ANIMATION_PARAMS, false);
@@ -345,7 +351,7 @@ public class SettingsValues {
 
     private static final String SUGGESTIONS_VISIBILITY_HIDE_VALUE_OBSOLETE = "2";
 
-    private static boolean readSuggestionsEnabled(final SharedPreferences prefs) {
+    public static boolean readSuggestionsEnabled(final SharedPreferences prefs) {
         if (prefs.contains(Settings.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE)) {
             final boolean alwaysHide = SUGGESTIONS_VISIBILITY_HIDE_VALUE_OBSOLETE.equals(
                     prefs.getString(Settings.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE, null));
@@ -356,6 +362,14 @@ public class SettingsValues {
         }
         return prefs.getBoolean(Settings.PREF_SHOW_SUGGESTIONS, true);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeSuggestionsEnabled(final SharedPreferences prefs,
+            final Boolean pref_suggestion_enable) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(Settings.PREF_SHOW_SUGGESTIONS, pref_suggestion_enable);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     private static boolean readBigramPredictionEnabled(final SharedPreferences prefs,
             final Resources res) {
