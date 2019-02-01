@@ -162,8 +162,12 @@ public class SettingsValues {
                 : true /* forcibly */;
         mShowsLanguageSwitchKey = Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS
                 ? Settings.readShowsLanguageSwitchKey(prefs) : true /* forcibly */;
-        mUseContactsDict = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true);
         // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_use_contacts_dict = SystemProperties.getBoolean("persist.cust.kb.contact_sugg",true);
+            Settings.writeUseContactsDict(prefs, prop_use_contacts_dict);
+        }
+        mUseContactsDict = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true);
         if (firstSet) {
             boolean prop_personalized_dicts = SystemProperties.getBoolean("persist.cust.kb.pers_sugg",true);
             Settings.writePersonalizedDicts(prefs, prop_personalized_dicts);

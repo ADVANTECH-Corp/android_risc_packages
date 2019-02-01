@@ -279,6 +279,15 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     }
     // AIM_Android 2.1.1 ---
     // AIM_Android 2.1.1 +++
+    public static boolean readUseContactsDict(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_KEY_USE_CONTACTS_DICT, true);
+    }
+    public static void writeUseContactsDict(final SharedPreferences prefs,
+            final Boolean pref_use_contacts_dict) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_KEY_USE_CONTACTS_DICT, pref_use_contacts_dict);
+        editor.apply();
+    }
     public static boolean readPersonalizedDicts(final SharedPreferences prefs) {
         return prefs.getBoolean(PREF_KEY_USE_PERSONALIZED_DICTS, true);
     }
