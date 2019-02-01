@@ -278,7 +278,17 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         editor.apply();
     }
     // AIM_Android 2.1.1 ---
-
+    // AIM_Android 2.1.1 +++
+    public static boolean readPersonalizedDicts(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_KEY_USE_PERSONALIZED_DICTS, true);
+    }
+    public static void writePersonalizedDicts(final SharedPreferences prefs,
+            final Boolean pref_personalized_dicts) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_KEY_USE_PERSONALIZED_DICTS, pref_personalized_dicts);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
     public static boolean readFromBuildConfigIfGestureInputEnabled(final Resources res) {
         return res.getBoolean(R.bool.config_gesture_input_enabled_by_build_config);
     }

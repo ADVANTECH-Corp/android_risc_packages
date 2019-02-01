@@ -138,6 +138,9 @@ public final class CorrectionSettingsFragment extends SubScreenFragment
         if (key.equals(Settings.PREF_SHOW_SUGGESTIONS)) {
             SystemProperties.set("persist.cust.kb.corr_sugg", SettingsValues.readSuggestionsEnabled(sharedPreferences)? "true" : "false");
         }
+        if (key.equals(Settings.PREF_KEY_USE_PERSONALIZED_DICTS)) {
+            SystemProperties.set("persist.cust.kb.pers_sugg", Settings.readPersonalizedDicts(sharedPreferences)? "true" : "false");
+        }
         // AIM_Android 2.1.1 ---
         if (!TextUtils.equals(key, Settings.PREF_KEY_USE_CONTACTS_DICT)) {
             return;

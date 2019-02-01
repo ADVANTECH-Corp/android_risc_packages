@@ -163,8 +163,12 @@ public class SettingsValues {
         mShowsLanguageSwitchKey = Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS
                 ? Settings.readShowsLanguageSwitchKey(prefs) : true /* forcibly */;
         mUseContactsDict = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true);
-        mUsePersonalizedDicts = prefs.getBoolean(Settings.PREF_KEY_USE_PERSONALIZED_DICTS, true);
         // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_personalized_dicts = SystemProperties.getBoolean("persist.cust.kb.pers_sugg",true);
+            Settings.writePersonalizedDicts(prefs, prop_personalized_dicts);
+        }
+        mUsePersonalizedDicts = prefs.getBoolean(Settings.PREF_KEY_USE_PERSONALIZED_DICTS, true);
         if (firstSet) {
             boolean prop_double_space_period = SystemProperties.getBoolean("persist.cust.kb.double_period",true);
             Settings.writeKeyDoubleSpacePeriod(prefs, prop_double_space_period);
