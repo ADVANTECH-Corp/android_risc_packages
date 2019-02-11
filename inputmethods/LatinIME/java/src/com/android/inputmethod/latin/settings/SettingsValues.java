@@ -195,7 +195,13 @@ public class SettingsValues {
         final String autoCorrectionThresholdRawValue = mAutoCorrectEnabled
                 ? res.getString(R.string.auto_correction_threshold_mode_index_modest)
                 : res.getString(R.string.auto_correction_threshold_mode_index_off);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_next_word_prediction = SystemProperties.getBoolean("persist.cust.kb.nextword_sugg",true);
+            writeBigramPredictionEnabled(prefs, prop_next_word_prediction);
+        }
         mBigramPredictionEnabled = readBigramPredictionEnabled(prefs, res);
+        // AIM_Android 2.1.1 ---
         mDoubleSpacePeriodTimeout = res.getInteger(R.integer.config_double_space_period_timeout);
         mHasHardwareKeyboard = Settings.readHasHardwareKeyboard(res.getConfiguration());
         mEnableMetricsLogging = prefs.getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
@@ -379,11 +385,19 @@ public class SettingsValues {
     }
     // AIM_Android 2.1.1 ---
 
-    private static boolean readBigramPredictionEnabled(final SharedPreferences prefs,
+    public static boolean readBigramPredictionEnabled(final SharedPreferences prefs,
             final Resources res) {
         return prefs.getBoolean(Settings.PREF_BIGRAM_PREDICTIONS, res.getBoolean(
                 R.bool.config_default_next_word_prediction));
     }
+    // AIM_Android 2.1.1 +++
+    private static void writeBigramPredictionEnabled(final SharedPreferences prefs,
+            final Boolean pref_next_word_prediction) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(Settings.PREF_BIGRAM_PREDICTIONS, pref_next_word_prediction);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     private static float readAutoCorrectionThreshold(final Resources res,
             final String currentAutoCorrectionSetting) {
