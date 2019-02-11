@@ -433,6 +433,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         }
         return prefs.getBoolean(PREF_SHOW_SETUP_WIZARD_ICON, false);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeShowSetupWizardIcon(final SharedPreferences prefs,
+            final Boolean pref_show_setup_wizard_icon) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_SHOW_SETUP_WIZARD_ICON, pref_show_setup_wizard_icon);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static boolean readHasHardwareKeyboard(final Configuration conf) {
         // The standard way of finding out whether we have a hardware keyboard. This code is taken

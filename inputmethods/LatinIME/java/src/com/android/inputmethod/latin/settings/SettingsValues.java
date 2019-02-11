@@ -223,7 +223,13 @@ public class SettingsValues {
         mKeyPreviewPopupDismissDelay = Settings.readKeyPreviewPopupDismissDelay(prefs, res);
         mEnableEmojiAltPhysicalKey = prefs.getBoolean(
                 Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_show_setup_wizard_icon = SystemProperties.getBoolean("persist.cust.kb.show_icon",false);
+            Settings.writeShowSetupWizardIcon(prefs, prop_show_setup_wizard_icon);
+        }
         mShowAppIcon = Settings.readShowSetupWizardIcon(prefs, context);
+        // AIM_Android 2.1.1 ---
         mIsShowAppIconSettingInPreferences = prefs.contains(Settings.PREF_SHOW_SETUP_WIZARD_ICON);
         mAutoCorrectionThreshold = readAutoCorrectionThreshold(res,
                 autoCorrectionThresholdRawValue);
