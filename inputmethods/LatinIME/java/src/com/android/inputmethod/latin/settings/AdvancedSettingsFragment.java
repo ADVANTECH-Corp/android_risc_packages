@@ -116,6 +116,11 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
             SystemProperties.set("persist.cust.kb.show_icon", Settings.readShowSetupWizardIcon(prefs, context)? "true" : "false");
             // AIM_Android 2.1.1 ---
         }
+        // AIM_Android 2.1.1 +++
+        if (key.equals(Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY)) {
+            SystemProperties.set("persist.cust.kb.phy_emoji", Settings.readEnableEmojiAltPhysicalKey(prefs)? "true" : "false");
+        }
+        // AIM_Android 2.1.1 ---
         updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY);
         refreshEnablingsOfKeypressSoundAndVibrationSettings();
     }

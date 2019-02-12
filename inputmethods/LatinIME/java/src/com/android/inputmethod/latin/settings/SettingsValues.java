@@ -221,8 +221,15 @@ public class SettingsValues {
         mKeypressVibrationDuration = Settings.readKeypressVibrationDuration(prefs, res);
         mKeypressSoundVolume = Settings.readKeypressSoundVolume(prefs, res);
         mKeyPreviewPopupDismissDelay = Settings.readKeyPreviewPopupDismissDelay(prefs, res);
-        mEnableEmojiAltPhysicalKey = prefs.getBoolean(
-                Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_enable_emoji_alt_phy_key = SystemProperties.getBoolean("persist.cust.kb.phy_emoji",true);
+            Settings.writeEnableEmojiAltPhysicalKey(prefs, prop_enable_emoji_alt_phy_key);
+        }
+        mEnableEmojiAltPhysicalKey = Settings.readEnableEmojiAltPhysicalKey(prefs);
+//         mEnableEmojiAltPhysicalKey = prefs.getBoolean(
+//                 Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true);
+        // AIM_Android 2.1.1 ---
         // AIM_Android 2.1.1 +++
         if (firstSet) {
             boolean prop_show_setup_wizard_icon = SystemProperties.getBoolean("persist.cust.kb.show_icon",false);

@@ -226,6 +226,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         editor.putBoolean(PREF_ENABLE_SPLIT_KEYBOARD, pref_enable_split_keyboard);
         editor.apply();
     }
+    public static boolean readEnableEmojiAltPhysicalKey(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true);
+    }
+    public static void writeEnableEmojiAltPhysicalKey(final SharedPreferences prefs, final Boolean pref_enable_emoji_alt_phy_key) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, pref_enable_emoji_alt_phy_key);
+        editor.apply();
+    }
     // AIM_Android 2.1.1 ---
     public static boolean readKeypressSoundEnabled(final SharedPreferences prefs,
             final Resources res) {
