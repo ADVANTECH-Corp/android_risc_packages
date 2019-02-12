@@ -120,6 +120,9 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
         if (key.equals(Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY)) {
             SystemProperties.set("persist.cust.kb.phy_emoji", Settings.readEnableEmojiAltPhysicalKey(prefs)? "true" : "false");
         }
+        if (key.equals(Settings.PREF_KEY_LONGPRESS_TIMEOUT)) {
+            SystemProperties.set("persist.cust.kb.key_long_delay", String.valueOf(Settings.readKeyLongpressTimeout(prefs, res)));
+        }
         // AIM_Android 2.1.1 ---
         updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY);
         refreshEnablingsOfKeypressSoundAndVibrationSettings();

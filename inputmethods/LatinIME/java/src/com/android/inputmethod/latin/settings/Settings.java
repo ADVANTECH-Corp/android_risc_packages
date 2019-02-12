@@ -385,6 +385,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         return (milliseconds != UNDEFINED_PREFERENCE_VALUE_INT) ? milliseconds
                 : readDefaultKeyLongpressTimeout(res);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeKeyLongpressTimeout(final SharedPreferences prefs,
+            final Integer pref_key_long_press_timeout) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(PREF_KEY_LONGPRESS_TIMEOUT, pref_key_long_press_timeout);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static int readDefaultKeyLongpressTimeout(final Resources res) {
         return res.getInteger(R.integer.config_default_longpress_key_timeout);

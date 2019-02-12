@@ -217,7 +217,22 @@ public class SettingsValues {
         mShouldShowLxxSuggestionUi = Settings.SHOULD_SHOW_LXX_SUGGESTION_UI
                 && prefs.getBoolean(DebugSettings.PREF_SHOULD_SHOW_LXX_SUGGESTION_UI, true);
         // Compute other readable settings
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            int keyLongPressTimeoutMax = res.getInteger(R.integer.config_max_longpress_timeout);
+            int keyLongPressTimeoutMin = res.getInteger(R.integer.config_min_longpress_timeout);
+            int keyLongPressTimeoutDefault = res.getInteger(R.integer.config_default_longpress_key_timeout);
+            int prop_key_long_press_timeout = SystemProperties.getInt("persist.cust.kb.key_long_delay", keyLongPressTimeoutDefault);
+            
+            if (prop_key_long_press_timeout >= keyLongPressTimeoutMin && prop_key_long_press_timeout <= keyLongPressTimeoutMax) {
+                Settings.writeKeyLongpressTimeout(prefs, prop_key_long_press_timeout);
+            } else {
+                Settings.writeKeyLongpressTimeout(prefs, keyLongPressTimeoutDefault);
+                SystemProperties.set("persist.cust.kb.key_long_delay", String.valueOf(keyLongPressTimeoutDefault));
+            }
+        }
         mKeyLongpressTimeout = Settings.readKeyLongpressTimeout(prefs, res);
+        // AIM_Android 2.1.1 ---
         mKeypressVibrationDuration = Settings.readKeypressVibrationDuration(prefs, res);
         mKeypressSoundVolume = Settings.readKeypressSoundVolume(prefs, res);
         mKeyPreviewPopupDismissDelay = Settings.readKeyPreviewPopupDismissDelay(prefs, res);
