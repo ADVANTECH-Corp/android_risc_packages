@@ -234,7 +234,19 @@ public class SettingsValues {
         mKeyLongpressTimeout = Settings.readKeyLongpressTimeout(prefs, res);
         // AIM_Android 2.1.1 ---
         mKeypressVibrationDuration = Settings.readKeypressVibrationDuration(prefs, res);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            float keyPressSoundVolDefault = Settings.readDefaultKeypressSoundVolume(res);
+            float prop_key_press_sound_vol = Float.parseFloat(SystemProperties.get("persist.cust.kb.key_sound_vol", String.valueOf(keyPressSoundVolDefault)));
+            if (prop_key_press_sound_vol >= 0.0 && prop_key_press_sound_vol <= 1.0) {
+                Settings.writeKeypressSoundVolume(prefs, prop_key_press_sound_vol);
+            } else {
+                Settings.writeKeypressSoundVolume(prefs, keyPressSoundVolDefault);
+                SystemProperties.set("persist.cust.kb.key_sound_vol", String.valueOf(keyPressSoundVolDefault));
+            }
+        }
         mKeypressSoundVolume = Settings.readKeypressSoundVolume(prefs, res);
+        // AIM_Android 2.1.1 ---
         mKeyPreviewPopupDismissDelay = Settings.readKeyPreviewPopupDismissDelay(prefs, res);
         // AIM_Android 2.1.1 +++
         if (firstSet) {

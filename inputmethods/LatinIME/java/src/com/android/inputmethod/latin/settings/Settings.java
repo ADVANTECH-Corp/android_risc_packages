@@ -368,6 +368,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         return (volume != UNDEFINED_PREFERENCE_VALUE_FLOAT) ? volume
                 : readDefaultKeypressSoundVolume(res);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeKeypressSoundVolume(final SharedPreferences prefs,
+            final float pref_key_press_sound_vol) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putFloat(PREF_KEYPRESS_SOUND_VOLUME, pref_key_press_sound_vol);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     // Default keypress sound volume for unknown devices.
     // The negative value means system default.

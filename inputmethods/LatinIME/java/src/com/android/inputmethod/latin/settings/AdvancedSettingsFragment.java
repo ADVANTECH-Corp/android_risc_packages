@@ -123,6 +123,9 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
         if (key.equals(Settings.PREF_KEY_LONGPRESS_TIMEOUT)) {
             SystemProperties.set("persist.cust.kb.key_long_delay", String.valueOf(Settings.readKeyLongpressTimeout(prefs, res)));
         }
+        if (key.equals(Settings.PREF_KEYPRESS_SOUND_VOLUME)) {
+            SystemProperties.set("persist.cust.kb.key_sound_vol", String.valueOf(Settings.readKeypressSoundVolume(prefs, res)));
+        }
         // AIM_Android 2.1.1 ---
         updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY);
         refreshEnablingsOfKeypressSoundAndVibrationSettings();
