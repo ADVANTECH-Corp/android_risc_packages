@@ -48,6 +48,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import android.os.SystemProperties; //AIM_Android 2.1.1
+
 /**
  * Enrichment class for InputMethodManager to simplify interaction and add functionality.
  */
@@ -111,8 +113,18 @@ public class RichInputMethodManager {
 
     public InputMethodSubtype[] getAdditionalSubtypes() {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        final String prefAdditionalSubtypes = Settings.readPrefAdditionalSubtypes(
+        // AIM_Android 2.1.1 +++
+        String prefAdditionalSubtypes = Settings.readPrefAdditionalSubtypes(
                 prefs, mContext.getResources());
+        String prop_add_input_style = SystemProperties.get("persist.cust.kb.input_style", null);
+        if (prefAdditionalSubtypes.indexOf(prop_add_input_style) == -1) {
+            if (prop_add_input_style != null) {
+                prefAdditionalSubtypes += (";" + prop_add_input_style + ":AsciiCapable");
+                Settings.writePrefAdditionalSubtypes(prefs, prefAdditionalSubtypes);
+            }
+        }
+//         Log.d(TAG, "getAdditionalSubtypes: " + prefAdditionalSubtypes);
+        // AIM_Android 2.1.1 ---
         return AdditionalSubtypeUtils.createAdditionalSubtypesArray(prefAdditionalSubtypes);
     }
 
