@@ -201,11 +201,53 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     }
 
     // Accessed from the settings interface, hence public
+    // AIM_Android 2.1.1 +++
+    public static boolean readKeyAutoCapitalizeEnabled(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_AUTO_CAP, true);
+    }
+    public static void writeKeyAutoCapitalizeEnabled(final SharedPreferences prefs, final Boolean prefs_autocap) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_AUTO_CAP, prefs_autocap);
+        editor.apply();
+    }
+    public static boolean readKeyDoubleSpacePeriod(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true);
+    }
+    public static void writeKeyDoubleSpacePeriod(final SharedPreferences prefs, final Boolean pref_double_space_period) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_KEY_USE_DOUBLE_SPACE_PERIOD, pref_double_space_period);
+        editor.apply();
+    }
+    public static boolean readKeyEnableSplitKeyboard(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_ENABLE_SPLIT_KEYBOARD, false);
+    }
+    public static void writeKeyEnableSplitKeyboard(final SharedPreferences prefs, final Boolean pref_enable_split_keyboard) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_ENABLE_SPLIT_KEYBOARD, pref_enable_split_keyboard);
+        editor.apply();
+    }
+    public static boolean readEnableEmojiAltPhysicalKey(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true);
+    }
+    public static void writeEnableEmojiAltPhysicalKey(final SharedPreferences prefs, final Boolean pref_enable_emoji_alt_phy_key) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, pref_enable_emoji_alt_phy_key);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
     public static boolean readKeypressSoundEnabled(final SharedPreferences prefs,
             final Resources res) {
         return prefs.getBoolean(PREF_SOUND_ON,
                 res.getBoolean(R.bool.config_default_sound_enabled));
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeKeypressSoundEnabled(final SharedPreferences prefs,
+            final Boolean pref_sound_enabled) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_SOUND_ON, pref_sound_enabled);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static boolean readVibrationEnabled(final SharedPreferences prefs,
             final Resources res) {
@@ -218,6 +260,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
             final Resources res) {
         return prefs.getBoolean(PREF_AUTO_CORRECTION, true);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeAutoCorrectEnabled(final SharedPreferences prefs,
+            final Boolean pref_auto_correct_enable) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_AUTO_CORRECTION, pref_auto_correct_enable);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static float readPlausibilityThreshold(final Resources res) {
         return Float.parseFloat(res.getString(R.string.plausibility_threshold));
@@ -228,7 +278,34 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         return prefs.getBoolean(PREF_BLOCK_POTENTIALLY_OFFENSIVE,
                 res.getBoolean(R.bool.config_block_potentially_offensive));
     }
-
+    // AIM_Android 2.1.1 +++
+    public static void writeBlockPotentiallyOffensive(final SharedPreferences prefs,
+            final Boolean pref_block_potentially_offensive) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_BLOCK_POTENTIALLY_OFFENSIVE, pref_block_potentially_offensive);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
+    // AIM_Android 2.1.1 +++
+    public static boolean readUseContactsDict(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_KEY_USE_CONTACTS_DICT, true);
+    }
+    public static void writeUseContactsDict(final SharedPreferences prefs,
+            final Boolean pref_use_contacts_dict) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_KEY_USE_CONTACTS_DICT, pref_use_contacts_dict);
+        editor.apply();
+    }
+    public static boolean readPersonalizedDicts(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_KEY_USE_PERSONALIZED_DICTS, true);
+    }
+    public static void writePersonalizedDicts(final SharedPreferences prefs,
+            final Boolean pref_personalized_dicts) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_KEY_USE_PERSONALIZED_DICTS, pref_personalized_dicts);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
     public static boolean readFromBuildConfigIfGestureInputEnabled(final Resources res) {
         return res.getBoolean(R.bool.config_gesture_input_enabled_by_build_config);
     }
@@ -291,6 +368,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         return (volume != UNDEFINED_PREFERENCE_VALUE_FLOAT) ? volume
                 : readDefaultKeypressSoundVolume(res);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeKeypressSoundVolume(final SharedPreferences prefs,
+            final float pref_key_press_sound_vol) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putFloat(PREF_KEYPRESS_SOUND_VOLUME, pref_key_press_sound_vol);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     // Default keypress sound volume for unknown devices.
     // The negative value means system default.
@@ -308,6 +393,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         return (milliseconds != UNDEFINED_PREFERENCE_VALUE_INT) ? milliseconds
                 : readDefaultKeyLongpressTimeout(res);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeKeyLongpressTimeout(final SharedPreferences prefs,
+            final Integer pref_key_long_press_timeout) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(PREF_KEY_LONGPRESS_TIMEOUT, pref_key_long_press_timeout);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static int readDefaultKeyLongpressTimeout(final Resources res) {
         return res.getInteger(R.integer.config_default_longpress_key_timeout);
@@ -364,6 +457,14 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
         }
         return prefs.getBoolean(PREF_SHOW_SETUP_WIZARD_ICON, false);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeShowSetupWizardIcon(final SharedPreferences prefs,
+            final Boolean pref_show_setup_wizard_icon) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_SHOW_SETUP_WIZARD_ICON, pref_show_setup_wizard_icon);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     public static boolean readHasHardwareKeyboard(final Configuration conf) {
         // The standard way of finding out whether we have a hardware keyboard. This code is taken

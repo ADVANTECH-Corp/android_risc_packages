@@ -27,6 +27,9 @@ import com.android.inputmethod.latin.AudioAndHapticFeedbackManager;
 import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.RichInputMethodManager;
 
+import android.os.SystemProperties; //AIM_Android 2.1.1
+import android.util.Log;
+
 /**
  * "Preferences" settings sub screen.
  *
@@ -39,6 +42,8 @@ import com.android.inputmethod.latin.RichInputMethodManager;
  * - Voice input key
  */
 public final class PreferencesSettingsFragment extends SubScreenFragment {
+
+    private static final String TAG = "PreferencesSettingsFragment";
 
     private static final boolean VOICE_IME_ENABLED =
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
@@ -86,10 +91,25 @@ public final class PreferencesSettingsFragment extends SubScreenFragment {
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
         final Resources res = getResources();
+//         Log.d(TAG, "onSharedPreferenceChanged key: " + key);
         if (key.equals(Settings.PREF_POPUP_ON)) {
             setPreferenceEnabled(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
                     Settings.readKeyPreviewPopupEnabled(prefs, res));
         }
+        // AIM_Android 2.1.1 +++
+        if (key.equals(Settings.PREF_AUTO_CAP)) {
+//             Log.d(TAG, "readKeyAutoCapitalizeEnabled: " + Settings.readKeyAutoCapitalizeEnabled(prefs));
+            SystemProperties.set("persist.cust.kb.auto_cap", Settings.readKeyAutoCapitalizeEnabled(prefs)? "true" : "false");
+        }
+        if (key.equals(Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD)) {
+//             Log.d(TAG, "set Prop: " + Settings.readKeyDoubleSpacePeriod(prefs));
+            SystemProperties.set("persist.cust.kb.double_period", Settings.readKeyDoubleSpacePeriod(prefs)? "true" : "false");
+        }
+        if (key.equals(Settings.PREF_SOUND_ON)) {
+//             Log.d(TAG, "sound_on set Prop: " + Settings.readKeypressSoundEnabled(prefs, res));
+            SystemProperties.set("persist.cust.kb.key_sound", Settings.readKeypressSoundEnabled(prefs, res)? "true" : "false");
+        }
+        // AIM_Android 2.1.1 ---
         refreshEnablingsOfKeypressSoundAndVibrationSettings();
     }
 

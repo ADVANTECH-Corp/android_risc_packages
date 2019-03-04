@@ -29,6 +29,8 @@ import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.SystemBroadcastReceiver;
 import com.android.inputmethod.latin.define.ProductionFlags;
 
+import android.os.SystemProperties; //AIM_Android 2.1.1
+
 /**
  * "Advanced" settings sub screen.
  *
@@ -104,12 +106,27 @@ public final class AdvancedSettingsFragment extends SubScreenFragment {
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
         final Resources res = getResources();
+        final Context context = getContext();
         if (key.equals(Settings.PREF_POPUP_ON)) {
             setPreferenceEnabled(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
                     Settings.readKeyPreviewPopupEnabled(prefs, res));
         } else if (key.equals(Settings.PREF_SHOW_SETUP_WIZARD_ICON)) {
             SystemBroadcastReceiver.toggleAppIcon(getActivity());
+            // AIM_Android 2.1.1 +++
+            SystemProperties.set("persist.cust.kb.show_icon", Settings.readShowSetupWizardIcon(prefs, context)? "true" : "false");
+            // AIM_Android 2.1.1 ---
         }
+        // AIM_Android 2.1.1 +++
+        if (key.equals(Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY)) {
+            SystemProperties.set("persist.cust.kb.phy_emoji", Settings.readEnableEmojiAltPhysicalKey(prefs)? "true" : "false");
+        }
+        if (key.equals(Settings.PREF_KEY_LONGPRESS_TIMEOUT)) {
+            SystemProperties.set("persist.cust.kb.key_long_delay", String.valueOf(Settings.readKeyLongpressTimeout(prefs, res)));
+        }
+        if (key.equals(Settings.PREF_KEYPRESS_SOUND_VOLUME)) {
+            SystemProperties.set("persist.cust.kb.key_sound_vol", String.valueOf(Settings.readKeypressSoundVolume(prefs, res)));
+        }
+        // AIM_Android 2.1.1 ---
         updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY);
         refreshEnablingsOfKeypressSoundAndVibrationSettings();
     }

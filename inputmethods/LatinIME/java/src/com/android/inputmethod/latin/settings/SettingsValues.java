@@ -39,6 +39,8 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import android.os.SystemProperties; //AIM_Android 2.1.1
+
 /**
  * When you call the constructor of this class, you may want to change the current system locale by
  * using {@link com.android.inputmethod.latin.utils.RunInLocale}.
@@ -52,6 +54,8 @@ public class SettingsValues {
     private static final String FLOAT_NEGATIVE_INFINITY_MARKER_STRING = "floatNegativeInfinity";
     private static final int TIMEOUT_TO_GET_TARGET_PACKAGE = 5; // seconds
     public static final float DEFAULT_SIZE_SCALE = 1.0f; // 100%
+    
+    private static boolean firstSet = true; //AIM_Android 2.1.1
 
     // From resources:
     public final SpacingAndPunctuations mSpacingAndPunctuations;
@@ -131,9 +135,22 @@ public class SettingsValues {
         mInputAttributes = inputAttributes;
 
         // Get the settings preferences
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_autocap = SystemProperties.getBoolean("persist.cust.kb.auto_cap",true);
+            Settings.writeKeyAutoCapitalizeEnabled(prefs, prop_autocap);
+        }
         mAutoCap = prefs.getBoolean(Settings.PREF_AUTO_CAP, true);
+//         Log.d(TAG, "mAutoCap: " + mAutoCap);
+        // AIM_Android 2.1.1 ---
         mVibrateOn = Settings.readVibrationEnabled(prefs, res);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_sound_enabled = SystemProperties.getBoolean("persist.cust.kb.key_sound",true);
+            Settings.writeKeypressSoundEnabled(prefs, prop_sound_enabled);
+        }
         mSoundOn = Settings.readKeypressSoundEnabled(prefs, res);
+        // AIM_Android 2.1.1 ---
         mKeyPreviewPopupOn = Settings.readKeyPreviewPopupEnabled(prefs, res);
         mSlidingKeyInputPreviewEnabled = prefs.getBoolean(
                 DebugSettings.PREF_SLIDING_KEY_INPUT_PREVIEW, true);
@@ -145,32 +162,108 @@ public class SettingsValues {
                 : true /* forcibly */;
         mShowsLanguageSwitchKey = Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS
                 ? Settings.readShowsLanguageSwitchKey(prefs) : true /* forcibly */;
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_use_contacts_dict = SystemProperties.getBoolean("persist.cust.kb.contact_sugg",true);
+            Settings.writeUseContactsDict(prefs, prop_use_contacts_dict);
+        }
         mUseContactsDict = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true);
+        if (firstSet) {
+            boolean prop_personalized_dicts = SystemProperties.getBoolean("persist.cust.kb.pers_sugg",true);
+            Settings.writePersonalizedDicts(prefs, prop_personalized_dicts);
+        }
         mUsePersonalizedDicts = prefs.getBoolean(Settings.PREF_KEY_USE_PERSONALIZED_DICTS, true);
+        if (firstSet) {
+            boolean prop_double_space_period = SystemProperties.getBoolean("persist.cust.kb.double_period",true);
+            Settings.writeKeyDoubleSpacePeriod(prefs, prop_double_space_period);
+        }
         mUseDoubleSpacePeriod = prefs.getBoolean(Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true)
                 && inputAttributes.mIsGeneralTextInput;
+        // AIM_Android 2.1.1 ---
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_block_potentially_offensive = SystemProperties.getBoolean("persist.cust.kb.block",true);
+            Settings.writeBlockPotentiallyOffensive(prefs, prop_block_potentially_offensive);
+        }
         mBlockPotentiallyOffensive = Settings.readBlockPotentiallyOffensive(prefs, res);
+        if (firstSet) {
+            boolean prop_auto_correct_enable = SystemProperties.getBoolean("persist.cust.kb.auto_corr",true);
+            Settings.writeAutoCorrectEnabled(prefs, prop_auto_correct_enable);
+        }
         mAutoCorrectEnabled = Settings.readAutoCorrectEnabled(prefs, res);
+        // AIM_Android 2.1.1 ---
         final String autoCorrectionThresholdRawValue = mAutoCorrectEnabled
                 ? res.getString(R.string.auto_correction_threshold_mode_index_modest)
                 : res.getString(R.string.auto_correction_threshold_mode_index_off);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_next_word_prediction = SystemProperties.getBoolean("persist.cust.kb.nextword_sugg",true);
+            writeBigramPredictionEnabled(prefs, prop_next_word_prediction);
+        }
         mBigramPredictionEnabled = readBigramPredictionEnabled(prefs, res);
+        // AIM_Android 2.1.1 ---
         mDoubleSpacePeriodTimeout = res.getInteger(R.integer.config_double_space_period_timeout);
         mHasHardwareKeyboard = Settings.readHasHardwareKeyboard(res.getConfiguration());
         mEnableMetricsLogging = prefs.getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_split_keyboard = SystemProperties.getBoolean("persist.cust.kb.split",false);
+            Settings.writeKeyEnableSplitKeyboard(prefs, prop_split_keyboard);
+        }
         mIsSplitKeyboardEnabled = prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD, false);
+        // AIM_Android 2.1.1 ---
         mScreenMetrics = Settings.readScreenMetrics(res);
 
         mShouldShowLxxSuggestionUi = Settings.SHOULD_SHOW_LXX_SUGGESTION_UI
                 && prefs.getBoolean(DebugSettings.PREF_SHOULD_SHOW_LXX_SUGGESTION_UI, true);
         // Compute other readable settings
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            int keyLongPressTimeoutMax = res.getInteger(R.integer.config_max_longpress_timeout);
+            int keyLongPressTimeoutMin = res.getInteger(R.integer.config_min_longpress_timeout);
+            int keyLongPressTimeoutDefault = res.getInteger(R.integer.config_default_longpress_key_timeout);
+            int prop_key_long_press_timeout = SystemProperties.getInt("persist.cust.kb.key_long_delay", keyLongPressTimeoutDefault);
+            
+            if (prop_key_long_press_timeout >= keyLongPressTimeoutMin && prop_key_long_press_timeout <= keyLongPressTimeoutMax) {
+                Settings.writeKeyLongpressTimeout(prefs, prop_key_long_press_timeout);
+            } else {
+                Settings.writeKeyLongpressTimeout(prefs, keyLongPressTimeoutDefault);
+                SystemProperties.set("persist.cust.kb.key_long_delay", String.valueOf(keyLongPressTimeoutDefault));
+            }
+        }
         mKeyLongpressTimeout = Settings.readKeyLongpressTimeout(prefs, res);
+        // AIM_Android 2.1.1 ---
         mKeypressVibrationDuration = Settings.readKeypressVibrationDuration(prefs, res);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            float keyPressSoundVolDefault = Settings.readDefaultKeypressSoundVolume(res);
+            float prop_key_press_sound_vol = Float.parseFloat(SystemProperties.get("persist.cust.kb.key_sound_vol", String.valueOf(keyPressSoundVolDefault)));
+            if (prop_key_press_sound_vol >= 0.0 && prop_key_press_sound_vol <= 1.0) {
+                Settings.writeKeypressSoundVolume(prefs, prop_key_press_sound_vol);
+            } else {
+                Settings.writeKeypressSoundVolume(prefs, keyPressSoundVolDefault);
+                SystemProperties.set("persist.cust.kb.key_sound_vol", String.valueOf(keyPressSoundVolDefault));
+            }
+        }
         mKeypressSoundVolume = Settings.readKeypressSoundVolume(prefs, res);
+        // AIM_Android 2.1.1 ---
         mKeyPreviewPopupDismissDelay = Settings.readKeyPreviewPopupDismissDelay(prefs, res);
-        mEnableEmojiAltPhysicalKey = prefs.getBoolean(
-                Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true);
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_enable_emoji_alt_phy_key = SystemProperties.getBoolean("persist.cust.kb.phy_emoji",true);
+            Settings.writeEnableEmojiAltPhysicalKey(prefs, prop_enable_emoji_alt_phy_key);
+        }
+        mEnableEmojiAltPhysicalKey = Settings.readEnableEmojiAltPhysicalKey(prefs);
+//         mEnableEmojiAltPhysicalKey = prefs.getBoolean(
+//                 Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true);
+        // AIM_Android 2.1.1 ---
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_show_setup_wizard_icon = SystemProperties.getBoolean("persist.cust.kb.show_icon",false);
+            Settings.writeShowSetupWizardIcon(prefs, prop_show_setup_wizard_icon);
+        }
         mShowAppIcon = Settings.readShowSetupWizardIcon(prefs, context);
+        // AIM_Android 2.1.1 ---
         mIsShowAppIconSettingInPreferences = prefs.contains(Settings.PREF_SHOW_SETUP_WIZARD_ICON);
         mAutoCorrectionThreshold = readAutoCorrectionThreshold(res,
                 autoCorrectionThresholdRawValue);
@@ -184,7 +277,13 @@ public class SettingsValues {
                 && prefs.getBoolean(Settings.PREF_GESTURE_FLOATING_PREVIEW_TEXT, true);
         mAutoCorrectionEnabledPerUserSettings = mAutoCorrectEnabled
                 && !mInputAttributes.mInputTypeNoAutoCorrect;
+        // AIM_Android 2.1.1 +++
+        if (firstSet) {
+            boolean prop_suggestion_enable = SystemProperties.getBoolean("persist.cust.kb.corr_sugg",true);
+            writeSuggestionsEnabled(prefs, prop_suggestion_enable);
+        }
         mSuggestionsEnabledPerUserSettings = readSuggestionsEnabled(prefs);
+        // AIM_Android 2.1.1 ---
         mIsInternal = Settings.isInternal(prefs);
         mHasCustomKeyPreviewAnimationParams = prefs.getBoolean(
                 DebugSettings.PREF_HAS_CUSTOM_KEY_PREVIEW_ANIMATION_PARAMS, false);
@@ -221,6 +320,9 @@ public class SettingsValues {
         } else {
             new TargetPackageInfoGetterTask(context, mAppWorkarounds)
                     .execute(mInputAttributes.mTargetApplicationPackageName);
+        }
+        if (firstSet) {
+            firstSet = false;
         }
     }
 
@@ -303,7 +405,7 @@ public class SettingsValues {
 
     private static final String SUGGESTIONS_VISIBILITY_HIDE_VALUE_OBSOLETE = "2";
 
-    private static boolean readSuggestionsEnabled(final SharedPreferences prefs) {
+    public static boolean readSuggestionsEnabled(final SharedPreferences prefs) {
         if (prefs.contains(Settings.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE)) {
             final boolean alwaysHide = SUGGESTIONS_VISIBILITY_HIDE_VALUE_OBSOLETE.equals(
                     prefs.getString(Settings.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE, null));
@@ -314,12 +416,28 @@ public class SettingsValues {
         }
         return prefs.getBoolean(Settings.PREF_SHOW_SUGGESTIONS, true);
     }
+    // AIM_Android 2.1.1 +++
+    public static void writeSuggestionsEnabled(final SharedPreferences prefs,
+            final Boolean pref_suggestion_enable) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(Settings.PREF_SHOW_SUGGESTIONS, pref_suggestion_enable);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
-    private static boolean readBigramPredictionEnabled(final SharedPreferences prefs,
+    public static boolean readBigramPredictionEnabled(final SharedPreferences prefs,
             final Resources res) {
         return prefs.getBoolean(Settings.PREF_BIGRAM_PREDICTIONS, res.getBoolean(
                 R.bool.config_default_next_word_prediction));
     }
+    // AIM_Android 2.1.1 +++
+    private static void writeBigramPredictionEnabled(final SharedPreferences prefs,
+            final Boolean pref_next_word_prediction) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(Settings.PREF_BIGRAM_PREDICTIONS, pref_next_word_prediction);
+        editor.apply();
+    }
+    // AIM_Android 2.1.1 ---
 
     private static float readAutoCorrectionThreshold(final Resources res,
             final String currentAutoCorrectionSetting) {
