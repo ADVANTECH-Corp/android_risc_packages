@@ -50,6 +50,8 @@ import com.android.settings.Utils;
 
 import java.util.Collection;
 
+import android.os.SystemProperties; // AIM_Android 2.1.1
+
 public class AdvancedWifiSettings extends SettingsPreferenceFragment
         implements Preference.OnPreferenceChangeListener {
 
@@ -120,8 +122,16 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
     private void initPreferences() {
         SwitchPreference notifyOpenNetworks =
             (SwitchPreference) findPreference(KEY_NOTIFY_OPEN_NETWORKS);
-        notifyOpenNetworks.setChecked(Settings.Global.getInt(getContentResolver(),
+        // AIM_Android 2.1.1 +++
+        String strNetNotif = SystemProperties.get("persist.wifi.net_notif");
+        if (strNetNotif.equals(""))
+            notifyOpenNetworks.setChecked(Settings.Global.getInt(getContentResolver(),
                 Settings.Global.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON, 0) == 1);
+        else if (strNetNotif.equals("false"))
+            notifyOpenNetworks.setChecked(false);
+        else
+            notifyOpenNetworks.setChecked(true);
+        // AIM_Android 2.1.1 ---
         notifyOpenNetworks.setEnabled(mWifiManager.isWifiEnabled());
 
         Intent intent = new Intent(Credentials.INSTALL_AS_USER_ACTION);
@@ -245,6 +255,12 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
             Global.putInt(getContentResolver(),
                     Settings.Global.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,
                     ((SwitchPreference) preference).isChecked() ? 1 : 0);
+            // AIM_Android 2.1.1 +++
+            if (((SwitchPreference) preference).isChecked())
+                SystemProperties.set("persist.wifi.net_notif","true");
+            else
+                SystemProperties.set("persist.wifi.net_notif","false");
+            // AIM_Android 2.1.1 ---
         } else {
             return super.onPreferenceTreeClick(screen, preference);
         }
