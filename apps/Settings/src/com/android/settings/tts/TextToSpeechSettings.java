@@ -50,6 +50,8 @@ import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Set;
 
+import android.os.SystemProperties; // AIM_Android 2.1.1
+
 public class TextToSpeechSettings extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener,
         RadioButtonGroupState {
@@ -222,7 +224,14 @@ public class TextToSpeechSettings extends SettingsPreferenceFragment implements
 
         // Set up the default rate.
         try {
-            mDefaultRate = android.provider.Settings.Secure.getInt(resolver, TTS_DEFAULT_RATE);
+                // AIM_Android 2.1.1 +++
+                String str = SystemProperties.get("persist.lang.tts.rate");
+                if (str.equals(""))
+                    mDefaultRate = android.provider.Settings.Secure.getInt(resolver, TTS_DEFAULT_RATE);
+                else {
+                    mDefaultRate = Integer.valueOf(str);
+                }
+                // AIM_Android 2.1.1 ---
         } catch (SettingNotFoundException e) {
             // Default rate setting not found, initialize it
             mDefaultRate = TextToSpeech.Engine.DEFAULT_RATE;
@@ -451,6 +460,9 @@ public class TextToSpeechSettings extends SettingsPreferenceFragment implements
             try {
                 android.provider.Settings.Secure.putInt(getContentResolver(),
                         TTS_DEFAULT_RATE, mDefaultRate);
+                // AIM_Android 2.1.1 +++
+                SystemProperties.set("persist.lang.tts.rate", String.valueOf(mDefaultRate));
+                // AIM_Android 2.1.1 ---
                 if (mTts != null) {
                     mTts.setSpeechRate(mDefaultRate / 100.0f);
                 }
