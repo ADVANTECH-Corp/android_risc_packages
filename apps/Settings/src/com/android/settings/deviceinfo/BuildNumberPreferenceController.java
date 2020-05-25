@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.support.v7.preference.Preference;
@@ -158,6 +159,10 @@ public class BuildNumberPreferenceController extends AbstractPreferenceControlle
             mMetricsFeatureProvider.action(
                     mContext, MetricsEvent.ACTION_SETTINGS_BUILD_NUMBER_PREF);
             return false;
+        }
+        
+        if (!SystemProperties.getBoolean("persist.setting.dev", true)) {
+            return true;
         }
 
         if (mDevHitCountdown > 0) {

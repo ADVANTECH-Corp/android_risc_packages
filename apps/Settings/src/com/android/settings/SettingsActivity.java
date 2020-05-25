@@ -53,6 +53,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toolbar;
+import android.os.SystemProperties;
 
 import com.android.internal.util.ArrayUtils;
 import com.android.settings.Settings.WifiSettingsActivity;
@@ -695,7 +696,7 @@ public class SettingsActivity extends SettingsDrawerActivity
                 || somethingChanged;
 
         final boolean showDev = DevelopmentSettingsEnabler.isDevelopmentSettingsEnabled(this)
-                && !Utils.isMonkeyRunning();
+                && !Utils.isMonkeyRunning() && SystemProperties.getBoolean("persist.setting.dev", true);
         final boolean isAdminOrDemo = um.isAdminUser() || um.isDemoUser();
         somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,
                         Settings.DevelopmentSettingsDashboardActivity.class.getName()),
@@ -704,7 +705,7 @@ public class SettingsActivity extends SettingsDrawerActivity
 
         // Enable/disable backup settings depending on whether the user is admin.
         somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,
-                BackupSettingsActivity.class.getName()), true, isAdmin)
+                BackupSettingsActivity.class.getName()), SystemProperties.getBoolean("persist.setting.factory_reset", true), isAdmin)
                 || somethingChanged;
 
         somethingChanged = setTileEnabled(changedList, new ComponentName(packageName,

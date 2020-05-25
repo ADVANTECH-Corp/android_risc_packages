@@ -25,6 +25,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.SearchIndexableResource;
@@ -63,6 +64,7 @@ public class PrivacySettings extends SettingsPreferenceFragment {
     @VisibleForTesting
     static final String DATA_MANAGEMENT = "data_management";
     private static final String BACKUP_INACTIVE = "backup_inactive";
+    private static final String FACTORY_RESET = "factory_reset";
     private static final String TAG = "PrivacySettings";
     private IBackupManager mBackupManager;
     private Preference mBackup;
@@ -227,6 +229,7 @@ public class PrivacySettings extends SettingsPreferenceFragment {
     private static void getNonVisibleKeys(Context context, Collection<String> nonVisibleKeys) {
         final IBackupManager backupManager = IBackupManager.Stub.asInterface(
                 ServiceManager.getService(Context.BACKUP_SERVICE));
+	boolean isHide = !SystemProperties.getBoolean("persist.setting.factory_reset", true);
         boolean isServiceActive = false;
         try {
             isServiceActive = backupManager.isBackupServiceActive(UserHandle.myUserId());
@@ -236,13 +239,17 @@ public class PrivacySettings extends SettingsPreferenceFragment {
         }
         boolean vendorSpecific = context.getPackageManager().
                 resolveContentProvider(GSETTINGS_PROVIDER, 0) == null;
-        if (vendorSpecific || isServiceActive) {
+        if (vendorSpecific || isServiceActive || isHide) {
             nonVisibleKeys.add(BACKUP_INACTIVE);
         }
-        if (vendorSpecific || !isServiceActive) {
+        if (vendorSpecific || !isServiceActive || isHide) {
             nonVisibleKeys.add(BACKUP_DATA);
             nonVisibleKeys.add(AUTO_RESTORE);
             nonVisibleKeys.add(CONFIGURE_ACCOUNT);
+        }
+	if (RestrictedLockUtils.hasBaseUserRestriction(context,
+            UserManager.DISALLOW_FACTORY_RESET, UserHandle.myUserId()) || isHide) {
+            nonVisibleKeys.add(FACTORY_RESET);
         }
     }
 }
